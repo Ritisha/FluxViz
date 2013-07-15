@@ -4,9 +4,8 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import org.cytoscape.fluxviz.internal.logic.AppColumnsCreator;
+import org.cytoscape.fluxviz.internal.logic.ColumnsCreator;
 import org.cytoscape.fluxviz.internal.logic.CyActivatorHelper;
-import org.cytoscape.fluxviz.internal.logic.RuleTableCreator;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNetworkManager;
 import org.cytoscape.model.CyTableFactory;
@@ -27,25 +26,19 @@ public class CyActivator extends AbstractCyActivator {
 		CyServiceRegistrar cyServiceRegistrar = getService(context, CyServiceRegistrar.class);
 		CyActivatorHelper helper = new CyActivatorHelper(context, cyServiceRegistrar);
 	
-		//create the rule table
-		RuleTableCreator ruleTableCreator = new RuleTableCreator(cyTableFactory, cyTableManager);
-		ruleTableCreator.createRuleTable();
-		
 		//add app-specific columns to default tables
 		Set<CyNetwork> allNets = new HashSet<CyNetwork>();
 		allNets = cyNetworkManager.getNetworkSet();
 		
 		for(CyNetwork currNet : allNets)
 		{
-			AppColumnsCreator.createColumns(currNet);
+			ColumnsCreator.createColumns(currNet);
 		}
 		
-		cyServiceRegistrar.registerService(new AppColumnsCreator(), NetworkAddedListener.class, new Properties() );
+		cyServiceRegistrar.registerService(new ColumnsCreator(), NetworkAddedListener.class, new Properties() );
 
 		//add fluxviz menu to node context menu
-		helper.addNodeSetTypeMenus();
-		helper.addNodeSetRuleMenu();
-		
+		helper.addNodeSetTypeMenus();		
 	  	  	
 		//add fluxviz menu to edge context menu
 		

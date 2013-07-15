@@ -1,6 +1,6 @@
 package org.cytoscape.fluxviz.internal.tasks;
 
-import org.cytoscape.fluxviz.internal.logic.AppColumnsCreator;
+import org.cytoscape.fluxviz.internal.logic.ColumnsCreator;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyRow;
 import org.cytoscape.task.AbstractNodeViewTask;
@@ -30,8 +30,8 @@ public class SetTypeNodeViewTask extends AbstractNodeViewTask {
 	public void run(TaskMonitor tm) throws Exception {
 
 		//update type in defaultNodeTable
-		CyRow row = AppColumnsCreator.DefaultNodeTable.getRow(nodeView.getSUID());
-		row.set(AppColumnsCreator.NODE_TYPE, type);
+		CyRow row = ColumnsCreator.DefaultNodeTable.getRow(nodeView.getSUID());
+		row.set(ColumnsCreator.NODE_TYPE, type);
 		
 		//update the look of the node based on type
 		
