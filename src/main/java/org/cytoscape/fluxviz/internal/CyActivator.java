@@ -6,10 +6,14 @@ import java.util.Set;
 
 import org.cytoscape.fluxviz.internal.logic.ColumnsCreator;
 import org.cytoscape.fluxviz.internal.logic.CyActivatorHelper;
+import org.cytoscape.fluxviz.internal.logic.EdgeDefaultsSetter;
+import org.cytoscape.fluxviz.internal.logic.NodeDefaultsSetter;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNetworkManager;
 import org.cytoscape.model.CyTableFactory;
 import org.cytoscape.model.CyTableManager;
+import org.cytoscape.model.events.AddedEdgesListener;
+import org.cytoscape.model.events.AddedNodesListener;
 import org.cytoscape.model.events.NetworkAddedListener;
 import org.cytoscape.service.util.AbstractCyActivator;
 import org.cytoscape.service.util.CyServiceRegistrar;
@@ -37,8 +41,15 @@ public class CyActivator extends AbstractCyActivator {
 		
 		cyServiceRegistrar.registerService(new ColumnsCreator(), NetworkAddedListener.class, new Properties() );
 
+		//set defaults for attributes of newly added nodes
+		cyServiceRegistrar.registerService(new NodeDefaultsSetter(), AddedNodesListener.class, new Properties());
+		
+		//set defaults for the attributes for newly added edges
+		cyServiceRegistrar.registerService(new EdgeDefaultsSetter(), AddedEdgesListener.class, new Properties());
+		
 		//add fluxviz menu to node context menu
-		helper.addNodeSetTypeMenus();		
+		helper.addNodeSetTypeMenus();
+		helper.addEdgeSetTypeMenus();
 	  	  	
 		//add fluxviz menu to edge context menu
 		

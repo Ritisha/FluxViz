@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Properties;
 
 import org.cytoscape.fluxviz.internal.tasks.CreateNewNodeTypeTaskFactory;
+import org.cytoscape.fluxviz.internal.tasks.SetTypeEdgeViewTask;
+import org.cytoscape.fluxviz.internal.tasks.SetTypeEdgeViewTaskFactory;
 import org.cytoscape.fluxviz.internal.tasks.SetTypeNodeViewTask;
 import org.cytoscape.fluxviz.internal.tasks.SetTypeNodeViewTaskFactory;
 import org.cytoscape.model.CyColumn;
@@ -18,6 +20,7 @@ import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTable;
 import org.cytoscape.model.CyTableManager;
 import org.cytoscape.service.util.CyServiceRegistrar;
+import org.cytoscape.task.EdgeViewTaskFactory;
 import org.cytoscape.task.NodeViewTaskFactory;
 import org.osgi.framework.BundleContext;
 
@@ -36,7 +39,7 @@ public class CyActivatorHelper {
 	{ 	
 		Properties kinaseProps = new Properties();
 	  	kinaseProps.setProperty(PREFERRED_ACTION, "NEW");
-	  	kinaseProps.setProperty(PREFERRED_MENU, "Set Type[100]");
+	  	kinaseProps.setProperty(PREFERRED_MENU, "Apps.FluxViz.Set Type");
 	  	kinaseProps.setProperty(MENU_GRAVITY, "6.0f");
 	  	kinaseProps.setProperty(IN_MENU_BAR, "false");
 	  	kinaseProps.setProperty(TITLE, SetTypeNodeViewTask.KINASE);
@@ -46,7 +49,7 @@ public class CyActivatorHelper {
 	  	
 	  	Properties moleculesProps = new Properties();
 	  	moleculesProps.setProperty(PREFERRED_ACTION, "NEW");
-	  	moleculesProps.setProperty(PREFERRED_MENU, "Set Type[100]");
+	  	moleculesProps.setProperty(PREFERRED_MENU, "Apps.FluxViz.Set Type");
 	  	moleculesProps.setProperty(MENU_GRAVITY, "7.0f");
 	  	moleculesProps.setProperty(IN_MENU_BAR, "false");
 	  	moleculesProps.setProperty(TITLE, SetTypeNodeViewTask.MOLECULES);
@@ -56,7 +59,7 @@ public class CyActivatorHelper {
 	  	
 	  	Properties gtpaseProps = new Properties();
 	  	gtpaseProps.setProperty(PREFERRED_ACTION, "NEW");
-	  	gtpaseProps.setProperty(PREFERRED_MENU, "Set Type[100]");
+	  	gtpaseProps.setProperty(PREFERRED_MENU, "Apps.FluxViz.Set Type");
 	  	gtpaseProps.setProperty(MENU_GRAVITY, "8.0f");
 	  	gtpaseProps.setProperty(IN_MENU_BAR, "false");
 	  	gtpaseProps.setProperty(TITLE, SetTypeNodeViewTask.GTPASE);
@@ -66,7 +69,7 @@ public class CyActivatorHelper {
 	  	
 	  	Properties receptorProps = new Properties();
 	  	receptorProps.setProperty(PREFERRED_ACTION, "NEW");
-	  	receptorProps.setProperty(PREFERRED_MENU, "Set Type[100]");
+	  	receptorProps.setProperty(PREFERRED_MENU, "Apps.FluxViz.Set Type");
 	  	receptorProps.setProperty(MENU_GRAVITY, "9.0f");
 	  	receptorProps.setProperty(IN_MENU_BAR, "false");
 	  	receptorProps.setProperty(TITLE, SetTypeNodeViewTask.RECEPTOR);
@@ -76,22 +79,35 @@ public class CyActivatorHelper {
 	  	
 	  	Properties receptorTKinaseProps = new Properties();
 	  	receptorTKinaseProps.setProperty(PREFERRED_ACTION, "NEW");
-	  	receptorTKinaseProps.setProperty(PREFERRED_MENU, "Set Type[100]");
+	  	receptorTKinaseProps.setProperty(PREFERRED_MENU, "Apps.FluxViz.Set Type");
 	  	receptorTKinaseProps.setProperty(MENU_GRAVITY, "10.0f");
 	  	receptorTKinaseProps.setProperty(IN_MENU_BAR, "false");
 	  	receptorTKinaseProps.setProperty(TITLE, SetTypeNodeViewTask.RECEPTOR_T_KINASE);
 	  	
 	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.RECEPTOR_T_KINASE), 
 	  			NodeViewTaskFactory.class, receptorTKinaseProps);
+	}
+	
+	public void addEdgeSetTypeMenus()
+	{
+		Properties activatingProps = new Properties();
+		activatingProps.setProperty(PREFERRED_ACTION, "NEW");
+		activatingProps.setProperty(PREFERRED_MENU, "Apps.FluxViz.Set Type");
+		activatingProps.setProperty(MENU_GRAVITY, "10.0f");
+		activatingProps.setProperty(IN_MENU_BAR, "false");
+		activatingProps.setProperty(TITLE, SetTypeEdgeViewTask.ACTIVATING);
 	  	
-	  	Properties createNewNodeTypeProps = new Properties();
-	  	createNewNodeTypeProps.setProperty(PREFERRED_ACTION, "NEW");
-	  	createNewNodeTypeProps.setProperty(PREFERRED_MENU, "Apps.FluxViz.Set Type");
-	  	createNewNodeTypeProps.setProperty(MENU_GRAVITY, "11.0f");
-	  	createNewNodeTypeProps.setProperty(IN_MENU_BAR, "false");
-	  	createNewNodeTypeProps.setProperty(TITLE, "Create New");
+	  	cyServiceRegistrar.registerService(new SetTypeEdgeViewTaskFactory(SetTypeEdgeViewTask.ACTIVATING), 
+	  			EdgeViewTaskFactory.class, activatingProps);
 	  	
-	  	cyServiceRegistrar.registerService(new CreateNewNodeTypeTaskFactory(), 
-	  			NodeViewTaskFactory.class, createNewNodeTypeProps);
+	  	Properties deactivatingProps = new Properties();
+		deactivatingProps.setProperty(PREFERRED_ACTION, "NEW");
+		deactivatingProps.setProperty(PREFERRED_MENU, "Apps.FluxViz.Set Type");
+		deactivatingProps.setProperty(MENU_GRAVITY, "10.0f");
+		deactivatingProps.setProperty(IN_MENU_BAR, "false");
+		deactivatingProps.setProperty(TITLE, SetTypeEdgeViewTask.DEACTIVATING);
+	  	
+	  	cyServiceRegistrar.registerService(new SetTypeEdgeViewTaskFactory(SetTypeEdgeViewTask.DEACTIVATING), 
+	  			EdgeViewTaskFactory.class, deactivatingProps);
 	}
 }

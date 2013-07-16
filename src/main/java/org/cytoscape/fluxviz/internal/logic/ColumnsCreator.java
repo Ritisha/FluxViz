@@ -3,6 +3,7 @@ package org.cytoscape.fluxviz.internal.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyRow;
@@ -77,24 +78,10 @@ public class ColumnsCreator implements NetworkAddedListener {
 		
 		//set defaults
 		List<CyNode> allNodes = new ArrayList<CyNode>();
-		CyRow row;
-		for(CyNode currNode : allNodes)
-		{
-			row = DefaultNodeTable.getRow(currNode.getSUID());
-			row.set(NODE_TYPE, "Kinase");
-			row.set(NUM_OF_INPUTS, 1);
-			row.set(TIME_RAMP, 1.0);
-			row.set(RELATIVE_CONCENTRATION, 1.0);
-			row.set(DECAY, 0.0001);
-			row.set(INITIAL_OUTPUT_VALUE, 0.0);
-			
-			row = HiddenNodeTable.getRow(currNode.getSUID());
-			row.set(CURR_OUTPUT, 0.0);
-			row.set(NEXT_OUTPUT, 0.0);
-			
-			row = DefaultEdgeTable.getRow(currNode.getSUID());
-			row.set(EDGE_TYPE, "Activating");
-			row.set(TARGET_INPUT, 1);		
-		}
+		List<CyEdge> allEdges = new ArrayList<CyEdge>();
+		allNodes = network.getNodeList();
+		allEdges = network.getEdgeList();
+		EdgeDefaultsSetter.addDefaults(DefaultEdgeTable, allEdges);
+		NodeDefaultsSetter.addDefaults(DefaultNodeTable, HiddenNodeTable, allNodes);
 	}
 }
