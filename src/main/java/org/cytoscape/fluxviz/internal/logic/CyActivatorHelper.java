@@ -22,17 +22,18 @@ import org.cytoscape.model.CyTableManager;
 import org.cytoscape.service.util.CyServiceRegistrar;
 import org.cytoscape.task.EdgeViewTaskFactory;
 import org.cytoscape.task.NodeViewTaskFactory;
+import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.osgi.framework.BundleContext;
 
 public class CyActivatorHelper {
 	
-	BundleContext context;
 	CyServiceRegistrar cyServiceRegistrar;
+	VisualMappingManager visualMappingManager;
 	
-	public CyActivatorHelper(BundleContext context, CyServiceRegistrar cyServiceRegistrar)
+	public CyActivatorHelper(CyServiceRegistrar cyServiceRegistrar, VisualMappingManager visualMappingManager)
 	{
-		this.context = context;
 		this.cyServiceRegistrar = cyServiceRegistrar;
+		this.visualMappingManager = visualMappingManager;
 	}
 	
 	public void addNodeSetTypeMenus()
@@ -44,7 +45,7 @@ public class CyActivatorHelper {
 	  	kinaseProps.setProperty(IN_MENU_BAR, "false");
 	  	kinaseProps.setProperty(TITLE, SetTypeNodeViewTask.KINASE);
 	  	
-	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.KINASE), 
+	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.KINASE, visualMappingManager), 
 	  			NodeViewTaskFactory.class, kinaseProps);
 	  	
 	  	Properties moleculesProps = new Properties();
@@ -54,7 +55,7 @@ public class CyActivatorHelper {
 	  	moleculesProps.setProperty(IN_MENU_BAR, "false");
 	  	moleculesProps.setProperty(TITLE, SetTypeNodeViewTask.MOLECULES);
 	  	
-	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.MOLECULES), 
+	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.MOLECULES, visualMappingManager), 
 	  			NodeViewTaskFactory.class, moleculesProps);
 	  	
 	  	Properties gtpaseProps = new Properties();
@@ -64,7 +65,7 @@ public class CyActivatorHelper {
 	  	gtpaseProps.setProperty(IN_MENU_BAR, "false");
 	  	gtpaseProps.setProperty(TITLE, SetTypeNodeViewTask.GTPASE);
 	  	
-	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.GTPASE), 
+	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.GTPASE, visualMappingManager), 
 	  			NodeViewTaskFactory.class, gtpaseProps);
 	  	
 	  	Properties receptorProps = new Properties();
@@ -74,7 +75,7 @@ public class CyActivatorHelper {
 	  	receptorProps.setProperty(IN_MENU_BAR, "false");
 	  	receptorProps.setProperty(TITLE, SetTypeNodeViewTask.RECEPTOR);
 	  	
-	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.RECEPTOR), 
+	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.RECEPTOR, visualMappingManager), 
 	  			NodeViewTaskFactory.class, receptorProps);
 	  	
 	  	Properties receptorTKinaseProps = new Properties();
@@ -84,7 +85,7 @@ public class CyActivatorHelper {
 	  	receptorTKinaseProps.setProperty(IN_MENU_BAR, "false");
 	  	receptorTKinaseProps.setProperty(TITLE, SetTypeNodeViewTask.RECEPTOR_T_KINASE);
 	  	
-	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.RECEPTOR_T_KINASE), 
+	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.RECEPTOR_T_KINASE, visualMappingManager), 
 	  			NodeViewTaskFactory.class, receptorTKinaseProps);
 	}
 	
@@ -97,7 +98,7 @@ public class CyActivatorHelper {
 		activatingProps.setProperty(IN_MENU_BAR, "false");
 		activatingProps.setProperty(TITLE, SetTypeEdgeViewTask.ACTIVATING);
 	  	
-	  	cyServiceRegistrar.registerService(new SetTypeEdgeViewTaskFactory(SetTypeEdgeViewTask.ACTIVATING), 
+	  	cyServiceRegistrar.registerService(new SetTypeEdgeViewTaskFactory(SetTypeEdgeViewTask.ACTIVATING, visualMappingManager), 
 	  			EdgeViewTaskFactory.class, activatingProps);
 	  	
 	  	Properties deactivatingProps = new Properties();
@@ -107,7 +108,7 @@ public class CyActivatorHelper {
 		deactivatingProps.setProperty(IN_MENU_BAR, "false");
 		deactivatingProps.setProperty(TITLE, SetTypeEdgeViewTask.DEACTIVATING);
 	  	
-	  	cyServiceRegistrar.registerService(new SetTypeEdgeViewTaskFactory(SetTypeEdgeViewTask.DEACTIVATING), 
+	  	cyServiceRegistrar.registerService(new SetTypeEdgeViewTaskFactory(SetTypeEdgeViewTask.DEACTIVATING, visualMappingManager), 
 	  			EdgeViewTaskFactory.class, deactivatingProps);
 	}
 }

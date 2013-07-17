@@ -16,9 +16,9 @@ public class EdgeDefaultsSetter implements AddedEdgesListener {
 	public void handleEvent(AddedEdgesEvent e) {
 
 		CyNetwork network = e.getSource();
-		Collection<CyEdge> addedEdges = new ArrayList<CyEdge>();
-		addedEdges = e.getPayloadCollection();
-		addDefaults(network.getDefaultEdgeTable(), addedEdges);
+		Collection<CyEdge> edges = new ArrayList<CyEdge>();
+		edges = e.getPayloadCollection();
+		addDefaults(network.getDefaultEdgeTable(), edges);
 	}
 	
 	public static void addDefaults(CyTable defaultEdgeTable, Collection<CyEdge> edges)
