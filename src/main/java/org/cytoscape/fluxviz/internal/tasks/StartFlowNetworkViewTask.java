@@ -61,7 +61,7 @@ public class StartFlowNetworkViewTask extends AbstractNetworkViewTask {
 	
 	public Double evaluate(CyNode node, CyNetwork network, CyTable defaultEdgeTable, CyTable defaultNodeTable, CyTable hiddenNodeTable)
 	{
-		System.out.println("in evaluate");
+
 		Double v = new Double(0.0);
 		Double newV = new Double(0.0);
 		Double edgeSourceOutput = new Double(0.0);
@@ -79,7 +79,7 @@ public class StartFlowNetworkViewTask extends AbstractNetworkViewTask {
 		//In the future, we will iterate over all of the ports here: (in v1.0 we only have one port)
 		List<CyEdge> incomingEdges = new ArrayList<CyEdge>();
 		incomingEdges = network.getAdjacentEdgeList(node, CyEdge.Type.INCOMING);
-		
+
 		for(CyEdge currEdge : incomingEdges)
 		{
 			CyNode sourceNode = currEdge.getSource();
@@ -88,15 +88,14 @@ public class StartFlowNetworkViewTask extends AbstractNetworkViewTask {
 			edgeType = row.get(ColumnsCreator.EDGE_TYPE, String.class);
 			edgeEfficiency = row.get(ColumnsCreator.EDGE_EFFICIENCY, Double.class);
 			
-			row = defaultNodeTable.getRow(sourceNode.getSUID());
+			row = hiddenNodeTable.getRow(sourceNode.getSUID());
 			edgeSourceOutput = row.get(ColumnsCreator.CURR_OUTPUT, Double.class);
+			
+			row = defaultNodeTable.getRow(sourceNode.getSUID());
 			List<Double> edgeSourceNodePortEfficiencyList = new ArrayList<Double>();
 			edgeSourceNodePortEfficiencyList = row.getList(ColumnsCreator.PORT_EFFICIENCY, Double.class);
 			edgeSourcePort1Efficiency = edgeSourceNodePortEfficiencyList.get(0);
 			
-			System.out.println(edgeSourceOutput.doubleValue());
-			System.out.println(edgeEfficiency.doubleValue());
-			System.out.println(edgeSourcePort1Efficiency.doubleValue());
 			if(edgeType.equals("Activating"))
 			{
 				v += edgeSourceOutput.doubleValue() * edgeEfficiency.doubleValue() * edgeSourcePort1Efficiency.doubleValue();
@@ -107,8 +106,10 @@ public class StartFlowNetworkViewTask extends AbstractNetworkViewTask {
 			}
 		}
 		
-		row = defaultNodeTable.getRow(node.getSUID());
+		row = hiddenNodeTable.getRow(node.getSUID());
 		currentOutput = row.get(ColumnsCreator.CURR_OUTPUT, Double.class);
+		
+		row = defaultNodeTable.getRow(node.getSUID());
 		timeRamp = row.get(ColumnsCreator.TIME_RAMP, Double.class);
 		relativeConc = row.get(ColumnsCreator.RELATIVE_CONCENTRATION, Double.class);
 		decay = row.get(ColumnsCreator.DECAY, Double.class);

@@ -77,7 +77,7 @@ public class CyActivator extends AbstractCyActivator {
 		startProps.setProperty(PREFERRED_MENU, "Apps.FluxViz");
 		startProps.setProperty(MENU_GRAVITY, "10.0f");
 		startProps.setProperty(IN_MENU_BAR, "false");
-		startProps.setProperty(TITLE, "Start1");
+		startProps.setProperty(TITLE, "Start");
 	  	
 	  	cyServiceRegistrar.registerService(new StartFlowNetworkViewTaskFactory(nodeViewHandler, edgeViewHandler), 
 	  			NetworkViewTaskFactory.class, startProps);
