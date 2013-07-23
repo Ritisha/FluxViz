@@ -1,5 +1,6 @@
 package org.cytoscape.fluxviz.internal.tasks;
 
+import org.cytoscape.fluxviz.internal.logic.NodeViewHandler;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.task.AbstractNodeViewTaskFactory;
 import org.cytoscape.view.model.CyNetworkView;
@@ -10,16 +11,16 @@ import org.cytoscape.work.TaskIterator;
 public class SetTypeNodeViewTaskFactory extends AbstractNodeViewTaskFactory {
 
 	String nodeType;
-	VisualMappingManager visualMappingManager;
+	NodeViewHandler nodeViewHandler;
 	
-	public SetTypeNodeViewTaskFactory(String type, VisualMappingManager visualMappingManager)
+	public SetTypeNodeViewTaskFactory(String type, NodeViewHandler nodeViewHandler)
 	{
 		super();
 		nodeType = type;
-		this.visualMappingManager = visualMappingManager;
+		this.nodeViewHandler = nodeViewHandler;
 	}
 	@Override
 	public TaskIterator createTaskIterator(View<CyNode> nodeView, CyNetworkView networkView) {
-		return new TaskIterator(new SetTypeNodeViewTask(nodeView, networkView, nodeType, visualMappingManager));
+		return new TaskIterator(new SetTypeNodeViewTask(nodeView, networkView, nodeType, nodeViewHandler));
 	}
 }

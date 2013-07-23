@@ -1,6 +1,7 @@
 package org.cytoscape.fluxviz.internal.tasks;
 
 import org.cytoscape.fluxviz.internal.logic.ColumnsCreator;
+import org.cytoscape.fluxviz.internal.logic.EdgeViewHandler;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyRow;
 import org.cytoscape.task.AbstractEdgeViewTask;
@@ -18,17 +19,17 @@ public class SetTypeEdgeViewTask extends AbstractEdgeViewTask {
 	View<CyEdge> edgeView;
 	CyNetworkView networkView;
 	String type;
-	VisualMappingManager visualMappingManager;
+	EdgeViewHandler edgeViewHandler;
 	public static String ACTIVATING = "Activating";
 	public static String DEACTIVATING = "Deactivating";
 	
-	public SetTypeEdgeViewTask(View<CyEdge> edgeView, CyNetworkView networkView, String type, VisualMappingManager visualMappingManager)
+	public SetTypeEdgeViewTask(View<CyEdge> edgeView, CyNetworkView networkView, String type, EdgeViewHandler edgeViewHandler)
 	{
 		super(edgeView, networkView);
 		this.edgeView = edgeView;
 		this.networkView = networkView;
 		this.type = type;
-		this.visualMappingManager = visualMappingManager;
+		this.edgeViewHandler = edgeViewHandler;
 	}
 	@Override
 	public void run(TaskMonitor tm) throws Exception {
@@ -38,18 +39,7 @@ public class SetTypeEdgeViewTask extends AbstractEdgeViewTask {
 		row.set(ColumnsCreator.EDGE_TYPE, type);
 		
 		//update the look of the edge based on type
-		if(type.equals(ACTIVATING))
-		{
-			edgeView.setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.ARROW);
-		}
-		else
-		{
-			edgeView.setLockedValue(BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE, ArrowShapeVisualProperty.T);
-		}
-		
-		VisualStyle style = visualMappingManager.getCurrentVisualStyle();
-		style.apply(networkView);
-		networkView.updateView();
+		edgeViewHandler.setEdgeView(edgeView, networkView, type);
 	}
 
 }

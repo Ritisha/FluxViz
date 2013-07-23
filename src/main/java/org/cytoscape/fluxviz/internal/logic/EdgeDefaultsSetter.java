@@ -12,24 +12,34 @@ import org.cytoscape.model.events.AddedEdgesListener;
 
 public class EdgeDefaultsSetter implements AddedEdgesListener {
 
+	EdgeViewHandler edgeViewHandler;
+	
+	public EdgeDefaultsSetter(EdgeViewHandler edgeViewHandler)
+	{
+		super();
+		this.edgeViewHandler = edgeViewHandler;
+	}
 	@Override
 	public void handleEvent(AddedEdgesEvent e) {
 
 		CyNetwork network = e.getSource();
 		Collection<CyEdge> edges = new ArrayList<CyEdge>();
 		edges = e.getPayloadCollection();
-		addDefaults(network.getDefaultEdgeTable(), edges);
+		addDefaults(network, edges, edgeViewHandler);
 	}
 	
-	public static void addDefaults(CyTable defaultEdgeTable, Collection<CyEdge> edges)
+	public static void addDefaults(CyNetwork network, Collection<CyEdge> edges, EdgeViewHandler edgeViewHandler)
 	{
 		CyRow row;
+		CyTable defaultEdgeTable = network.getDefaultEdgeTable();
+
 		for(CyEdge currEdge : edges)
 		{
 			row = defaultEdgeTable.getRow(currEdge.getSUID());
 			row.set(ColumnsCreator.EDGE_TYPE, "Activating");
 			row.set(ColumnsCreator.TARGET_INPUT, 1);
+			row.set(ColumnsCreator.EDGE_EFFICIENCY, 1.0);
+			edgeViewHandler.setDefaultEdgeView(currEdge, network);
 		}	
 	}
-
 }

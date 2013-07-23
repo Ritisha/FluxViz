@@ -1,5 +1,6 @@
 package org.cytoscape.fluxviz.internal.tasks;
 
+import org.cytoscape.fluxviz.internal.logic.EdgeViewHandler;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.task.EdgeViewTaskFactory;
 import org.cytoscape.view.model.CyNetworkView;
@@ -10,18 +11,18 @@ import org.cytoscape.work.TaskIterator;
 public class SetTypeEdgeViewTaskFactory implements EdgeViewTaskFactory {
 
 	String edgeType;
-	VisualMappingManager visualMappingManager;
+	EdgeViewHandler edgeViewHandler;
 	
-	public SetTypeEdgeViewTaskFactory(String edgeType, VisualMappingManager visualMappingManager)
+	public SetTypeEdgeViewTaskFactory(String edgeType, EdgeViewHandler edgeViewHandler)
 	{
 		super();
 		this.edgeType = edgeType;
-		this.visualMappingManager = visualMappingManager;
+		this.edgeViewHandler = edgeViewHandler;
 	}
 	
 	@Override
 	public TaskIterator createTaskIterator(View<CyEdge> edgeView, CyNetworkView networkView) {
-		return new TaskIterator(new SetTypeEdgeViewTask(edgeView, networkView, edgeType, visualMappingManager));
+		return new TaskIterator(new SetTypeEdgeViewTask(edgeView, networkView, edgeType, edgeViewHandler));
 	}
 
 	@Override
