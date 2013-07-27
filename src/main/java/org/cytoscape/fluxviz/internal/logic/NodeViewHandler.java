@@ -1,10 +1,13 @@
 package org.cytoscape.fluxviz.internal.logic;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import org.cytoscape.fluxviz.internal.tasks.SetTypeNodeViewTask;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.view.model.CyNetworkView;
-import org.cytoscape.view.model.CyNetworkViewFactory;
+import org.cytoscape.view.model.CyNetworkViewManager;
 import org.cytoscape.view.model.View;
 import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.view.presentation.property.NodeShapeVisualProperty;
@@ -13,19 +16,20 @@ import org.cytoscape.view.vizmap.VisualStyle;
 
 public class NodeViewHandler {
 	
-	CyNetworkViewFactory cyNetworkViewFactory;
+	CyNetworkViewManager cyNetworkViewManager;
 	VisualMappingManager visualMappingManager;
 	
-	public NodeViewHandler(CyNetworkViewFactory cyNetworkViewFactory, VisualMappingManager visualMappingManager)
+	public NodeViewHandler(CyNetworkViewManager cyNetworkViewManager, VisualMappingManager visualMappingManager)
 	{
-		this.cyNetworkViewFactory = cyNetworkViewFactory;
+		this.cyNetworkViewManager = cyNetworkViewManager;
 		this.visualMappingManager = visualMappingManager;
 	}
 	
 	public void setDefaultNodeView(CyNode node, CyNetwork network)
 	{
-		System.out.println("in setDefaultNodeView \n");
-		CyNetworkView networkView = cyNetworkViewFactory.createNetworkView(network);
+		Collection<CyNetworkView> networkViewCollection = new HashSet<CyNetworkView>();
+		networkViewCollection = cyNetworkViewManager.getNetworkViews(network);
+		CyNetworkView networkView = networkViewCollection.iterator().next();
 		networkView.getNodeView(node).setLockedValue(BasicVisualLexicon.NODE_SHAPE, NodeShapeVisualProperty.DIAMOND);
 		refresh(networkView);
 	}
@@ -51,6 +55,10 @@ public class NodeViewHandler {
 		else if(type.equals(SetTypeNodeViewTask.RECEPTOR_T_KINASE))
 		{
 			nodeView.setLockedValue(BasicVisualLexicon.NODE_SHAPE, NodeShapeVisualProperty.PARALLELOGRAM);
+		}
+		else if(type.equals(SetTypeNodeViewTask.PHOSPHATASE))
+		{
+			nodeView.setLockedValue(BasicVisualLexicon.NODE_SHAPE, NodeShapeVisualProperty.OCTAGON);
 		}
 		
 		refresh(networkView);

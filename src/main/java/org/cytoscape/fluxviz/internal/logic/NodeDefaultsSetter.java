@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.cytoscape.fluxviz.internal.tasks.SetTypeNodeViewTask;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyRow;
-import org.cytoscape.model.CyTable;
 import org.cytoscape.model.events.AddedNodesEvent;
 import org.cytoscape.model.events.AddedNodesListener;
 
@@ -17,7 +17,7 @@ public class NodeDefaultsSetter implements AddedNodesListener {
 	
 	public NodeDefaultsSetter(NodeViewHandler nodeViewHandler)
 	{
-		super();
+		// * super();
 		this.nodeViewHandler = nodeViewHandler;
 	}
 	@Override
@@ -32,29 +32,44 @@ public class NodeDefaultsSetter implements AddedNodesListener {
 	public static void addDefaults(CyNetwork network, Collection<CyNode> nodes, NodeViewHandler nodeViewHandler)
 	{
 		CyRow row;
-		CyTable defaultNodeTable = network.getDefaultNodeTable();
-		CyTable hiddenNodeTable = network.getTable(CyNode.class, CyNetwork.HIDDEN_ATTRS);
 		
 		for(CyNode currNode : nodes)
 		{
-			System.out.println("in addDefaults of nodes");
-			row = defaultNodeTable.getRow(currNode.getSUID());
+			row = ColumnsCreator.DefaultNodeTable.getRow(currNode.getSUID());
 			List<Double> portEfficiency = new ArrayList<Double>();
 			portEfficiency.add(1.0);
 			
-			row.set(ColumnsCreator.NODE_TYPE, "Kinase");
-			row.set(ColumnsCreator.NUM_OF_INPUTS, 1);
-			row.set(ColumnsCreator.TIME_RAMP, 1.0);
-			row.set(ColumnsCreator.RELATIVE_CONCENTRATION, 1.0);
-			row.set(ColumnsCreator.DECAY, 0.0001);
-			row.set(ColumnsCreator.INITIAL_OUTPUT_VALUE, 0.0);
-			row.set(ColumnsCreator.PORT_EFFICIENCY, portEfficiency);
-			row.set(ColumnsCreator.INTEGER_OUTPUT_NODE_THRESH, 0.5);
-			row.set(ColumnsCreator.UPPER_BOUND, 1.0);
+			if(!row.isSet(ColumnsCreator.NODE_TYPE))
+				row.set(ColumnsCreator.NODE_TYPE, SetTypeNodeViewTask.KINASE);
 			
-			row = hiddenNodeTable.getRow(currNode.getSUID());
-			row.set(ColumnsCreator.CURR_OUTPUT, 0.0);
+			if(!row.isSet(ColumnsCreator.NUM_OF_INPUTS))
+				row.set(ColumnsCreator.NUM_OF_INPUTS, 1);
+			
+			if(!row.isSet(ColumnsCreator.TIME_RAMP))
+				row.set(ColumnsCreator.TIME_RAMP, 1.0);
+			
+			if(!row.isSet(ColumnsCreator.RELATIVE_CONCENTRATION))
+				row.set(ColumnsCreator.RELATIVE_CONCENTRATION, 1.0);
+			
+			if(!row.isSet(ColumnsCreator.DECAY))
+				row.set(ColumnsCreator.DECAY, 0.0001);
+			
+			if(!row.isSet(ColumnsCreator.INITIAL_OUTPUT_VALUE))
+				row.set(ColumnsCreator.INITIAL_OUTPUT_VALUE, 0.0);
+			
+			if(!row.isSet(ColumnsCreator.PORT_EFFICIENCY))
+				row.set(ColumnsCreator.PORT_EFFICIENCY, portEfficiency);
+			
+			if(!row.isSet(ColumnsCreator.INTEGER_OUTPUT_NODE_THRESH))
+				row.set(ColumnsCreator.INTEGER_OUTPUT_NODE_THRESH, 0.5);
+			
+			if(!row.isSet(ColumnsCreator.UPPER_BOUND))
+				row.set(ColumnsCreator.UPPER_BOUND, 1.0);
+			
+			row = ColumnsCreator.HiddenNodeTable.getRow(currNode.getSUID());
+			row.set(ColumnsCreator.CURR_OUTPUT, 0.5);
 			row.set(ColumnsCreator.NEXT_OUTPUT, 0.0);	
+			
 			nodeViewHandler.setDefaultNodeView(currNode, network);
 		}
 	}

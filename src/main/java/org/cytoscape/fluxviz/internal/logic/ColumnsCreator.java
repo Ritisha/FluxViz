@@ -4,6 +4,7 @@ package org.cytoscape.fluxviz.internal.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cytoscape.fluxviz.internal.tasks.SetTypeEdgeViewTask;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
@@ -23,7 +24,7 @@ public class ColumnsCreator implements NetworkAddedListener {
 	public static String RELATIVE_CONCENTRATION = "Relative Concentration";
 	public static String DECAY = "Decay";
 	public static String INITIAL_OUTPUT_VALUE = "Initial value of Output";
-	public static String PORT_EFFICIENCY = "Port Efficiency"; // this will save value for which port?
+	public static String PORT_EFFICIENCY = "Port Efficiency";
 	public static String INTEGER_OUTPUT_NODE_THRESH = "Integer Output Node Threshold";
 	public static String UPPER_BOUND = "Upper Bound";
 	
@@ -90,13 +91,13 @@ public class ColumnsCreator implements NetworkAddedListener {
 			DefaultNodeTable.createColumn(UPPER_BOUND, Double.class, true, 1.0);
 		
 		if(HiddenNodeTable.getColumn(CURR_OUTPUT) == null)
-			HiddenNodeTable.createColumn(CURR_OUTPUT, Double.class, true, 0.0);
+			HiddenNodeTable.createColumn(CURR_OUTPUT, Double.class, true, 0.5);
 		
 		if(HiddenNodeTable.getColumn(NEXT_OUTPUT) == null)
 			HiddenNodeTable.createColumn(NEXT_OUTPUT, Double.class, true, 0.0);
 		
 		if(DefaultEdgeTable.getColumn(EDGE_TYPE) == null)
-			DefaultEdgeTable.createColumn(EDGE_TYPE, String.class, true, "Activating");
+			DefaultEdgeTable.createColumn(EDGE_TYPE, String.class, true, SetTypeEdgeViewTask.ACTIVATING);
 		
 		if(DefaultEdgeTable.getColumn(TARGET_INPUT) == null)
 			DefaultEdgeTable.createColumn(TARGET_INPUT, Integer.class, true, 1);
@@ -104,7 +105,6 @@ public class ColumnsCreator implements NetworkAddedListener {
 		if(DefaultEdgeTable.getColumn(EDGE_EFFICIENCY) == null)
 			DefaultEdgeTable.createColumn(EDGE_EFFICIENCY, Double.class, true, 1.0);
 		
-		System.out.println("in createColumns");
 		allNodes = network.getNodeList();
 		allEdges = network.getEdgeList();
 		EdgeDefaultsSetter.addDefaults(network, allEdges, edgeViewHandler);

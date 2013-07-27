@@ -5,7 +5,6 @@ import org.cytoscape.model.CyEdge;
 import org.cytoscape.task.EdgeViewTaskFactory;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.View;
-import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.work.TaskIterator;
 
 public class SetTypeEdgeViewTaskFactory implements EdgeViewTaskFactory {

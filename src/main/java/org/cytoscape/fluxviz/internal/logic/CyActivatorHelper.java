@@ -38,11 +38,9 @@ public class CyActivatorHelper {
 	  	kinaseProps.setProperty(IN_MENU_BAR, "false");
 	  	kinaseProps.setProperty(TITLE, SetTypeNodeViewTask.KINASE);
 	  	
-	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.KINASE, nodeViewHandler), 
+	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.KINASE, nodeViewHandler, edgeViewHandler), 
 	  			NodeViewTaskFactory.class, kinaseProps);
-	  	
-	  	System.out.println("registering node menus");
-	  	
+	  		  	
 	  	Properties moleculesProps = new Properties();
 	  	moleculesProps.setProperty(PREFERRED_ACTION, "NEW");
 	  	moleculesProps.setProperty(PREFERRED_MENU, "Apps.FluxViz.Set Type");
@@ -50,7 +48,7 @@ public class CyActivatorHelper {
 	  	moleculesProps.setProperty(IN_MENU_BAR, "false");
 	  	moleculesProps.setProperty(TITLE, SetTypeNodeViewTask.MOLECULES);
 	  	
-	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.MOLECULES, nodeViewHandler), 
+	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.MOLECULES, nodeViewHandler, edgeViewHandler), 
 	  			NodeViewTaskFactory.class, moleculesProps);
 	  	
 	  	Properties gtpaseProps = new Properties();
@@ -60,7 +58,7 @@ public class CyActivatorHelper {
 	  	gtpaseProps.setProperty(IN_MENU_BAR, "false");
 	  	gtpaseProps.setProperty(TITLE, SetTypeNodeViewTask.GTPASE);
 	  	
-	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.GTPASE, nodeViewHandler), 
+	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.GTPASE, nodeViewHandler, edgeViewHandler), 
 	  			NodeViewTaskFactory.class, gtpaseProps);
 	  	
 	  	Properties receptorProps = new Properties();
@@ -70,7 +68,7 @@ public class CyActivatorHelper {
 	  	receptorProps.setProperty(IN_MENU_BAR, "false");
 	  	receptorProps.setProperty(TITLE, SetTypeNodeViewTask.RECEPTOR);
 	  	
-	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.RECEPTOR, nodeViewHandler), 
+	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.RECEPTOR, nodeViewHandler, edgeViewHandler), 
 	  			NodeViewTaskFactory.class, receptorProps);
 	  	
 	  	Properties receptorTKinaseProps = new Properties();
@@ -80,8 +78,18 @@ public class CyActivatorHelper {
 	  	receptorTKinaseProps.setProperty(IN_MENU_BAR, "false");
 	  	receptorTKinaseProps.setProperty(TITLE, SetTypeNodeViewTask.RECEPTOR_T_KINASE);
 	  	
-	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.RECEPTOR_T_KINASE, nodeViewHandler), 
+	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.RECEPTOR_T_KINASE, nodeViewHandler, edgeViewHandler), 
 	  			NodeViewTaskFactory.class, receptorTKinaseProps);
+	  	
+	  	Properties phosphataseProps = new Properties();
+	  	phosphataseProps.setProperty(PREFERRED_ACTION, "NEW");
+	  	phosphataseProps.setProperty(PREFERRED_MENU, "Apps.FluxViz.Set Type");
+	  	phosphataseProps.setProperty(MENU_GRAVITY, "10.0f");
+	  	phosphataseProps.setProperty(IN_MENU_BAR, "false");
+	  	phosphataseProps.setProperty(TITLE, SetTypeNodeViewTask.PHOSPHATASE);
+	  	
+	  	cyServiceRegistrar.registerService(new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.PHOSPHATASE, nodeViewHandler, edgeViewHandler), 
+	  			NodeViewTaskFactory.class, phosphataseProps);
 	}
 	
 	public void addEdgeSetTypeMenus()

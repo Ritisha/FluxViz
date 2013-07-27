@@ -3,10 +3,12 @@ package org.cytoscape.fluxviz.internal.logic;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cytoscape.fluxviz.internal.tasks.SetTypeEdgeViewTask;
+import org.cytoscape.fluxviz.internal.tasks.SetTypeNodeViewTask;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
+import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyRow;
-import org.cytoscape.model.CyTable;
 import org.cytoscape.model.events.AddedEdgesEvent;
 import org.cytoscape.model.events.AddedEdgesListener;
 
@@ -31,15 +33,16 @@ public class EdgeDefaultsSetter implements AddedEdgesListener {
 	public static void addDefaults(CyNetwork network, Collection<CyEdge> edges, EdgeViewHandler edgeViewHandler)
 	{
 		CyRow row;
-		CyTable defaultEdgeTable = network.getDefaultEdgeTable();
+		CyNode sourceNode;
+		String sourceNodeType;
 
 		for(CyEdge currEdge : edges)
 		{
-			row = defaultEdgeTable.getRow(currEdge.getSUID());
-			row.set(ColumnsCreator.EDGE_TYPE, "Activating");
-			row.set(ColumnsCreator.TARGET_INPUT, 1);
-			row.set(ColumnsCreator.EDGE_EFFICIENCY, 1.0);
-			edgeViewHandler.setDefaultEdgeView(currEdge, network);
+			sourceNode = currEdge.getSource();
+			row = ColumnsCreator.DefaultNodeTable.getRow(sourceNode.getSUID());
+			sourceNodeType = row.get(ColumnsCreator.NODE_TYPE, String.class);
+			
+			SetTypeNodeViewTask.setDefaultsForEdgeBasedOnNodeType(currEdge, network, sourceNodeType, edgeViewHandler);
 		}	
 	}
 }

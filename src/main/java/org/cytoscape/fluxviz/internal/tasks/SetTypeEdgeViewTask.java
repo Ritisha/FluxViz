@@ -7,11 +7,7 @@ import org.cytoscape.model.CyRow;
 import org.cytoscape.task.AbstractEdgeViewTask;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.View;
-import org.cytoscape.view.presentation.property.ArrowShapeVisualProperty;
-import org.cytoscape.view.presentation.property.BasicVisualLexicon;
-import org.cytoscape.view.presentation.property.values.ArrowShape;
-import org.cytoscape.view.vizmap.VisualMappingManager;
-import org.cytoscape.view.vizmap.VisualStyle;
+
 import org.cytoscape.work.TaskMonitor;
 
 public class SetTypeEdgeViewTask extends AbstractEdgeViewTask {
@@ -35,11 +31,11 @@ public class SetTypeEdgeViewTask extends AbstractEdgeViewTask {
 	public void run(TaskMonitor tm) throws Exception {
 
 		//update type in default edge table
-		CyRow row = ColumnsCreator.DefaultEdgeTable.getRow(edgeView.getSUID());
+		CyRow row = ColumnsCreator.DefaultEdgeTable.getRow(edgeView.getModel().getSUID());
 		row.set(ColumnsCreator.EDGE_TYPE, type);
 		
 		//update the look of the edge based on type
-		edgeViewHandler.setEdgeView(edgeView, networkView, type);
+		edgeViewHandler.setEdgeView(edgeView.getModel(), networkView.getModel(), type);
 	}
 
 }
