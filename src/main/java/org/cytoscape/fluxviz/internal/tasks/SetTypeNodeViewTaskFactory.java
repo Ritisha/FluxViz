@@ -14,6 +14,12 @@ public class SetTypeNodeViewTaskFactory extends AbstractNodeViewTaskFactory {
 	NodeViewHandler nodeViewHandler;
 	EdgeViewHandler edgeViewHandler;
 	
+	/**
+	 * Calls the SetTypeNodeViewTask
+	 * @param type
+	 * @param nodeViewHandler
+	 * @param edgeViewHandler
+	 */
 	public SetTypeNodeViewTaskFactory(String type, NodeViewHandler nodeViewHandler, EdgeViewHandler edgeViewHandler)
 	{
 		super();

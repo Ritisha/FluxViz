@@ -10,6 +10,10 @@ import org.cytoscape.view.model.View;
 
 import org.cytoscape.work.TaskMonitor;
 
+/**
+ * @author laungani
+ *
+ */
 public class SetTypeEdgeViewTask extends AbstractEdgeViewTask {
 
 	View<CyEdge> edgeView;
@@ -19,6 +23,13 @@ public class SetTypeEdgeViewTask extends AbstractEdgeViewTask {
 	public static String ACTIVATING = "Activating";
 	public static String DEACTIVATING = "Deactivating";
 	
+	/**
+	 * Sets the type of edge to Activating or Deactivating and sets the view accordingly
+	 * @param edgeView
+	 * @param networkView
+	 * @param type
+	 * @param edgeViewHandler
+	 */
 	public SetTypeEdgeViewTask(View<CyEdge> edgeView, CyNetworkView networkView, String type, EdgeViewHandler edgeViewHandler)
 	{
 		super(edgeView, networkView);

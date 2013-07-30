@@ -13,6 +13,12 @@ import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyle;
 
+/**
+ * 
+ * @author laungani
+ * This class handles setting of the edge view to ARRAW or T
+ *
+ */
 public class EdgeViewHandler {
 	
 	CyNetworkViewManager cyNetworkViewManager;
@@ -24,6 +30,10 @@ public class EdgeViewHandler {
 		this.visualMappingManager = visualMappingManager;
 	}
 	
+	/**
+	 * @param edge
+	 * @param network
+	 */
 	public void setDefaultEdgeView(CyEdge edge, CyNetwork network)
 	{
 		Collection<CyNetworkView> networkViewCollection = new HashSet<CyNetworkView>();
@@ -34,6 +44,12 @@ public class EdgeViewHandler {
 		refresh(networkView);
 	}
 	
+	/**
+	 * Sets the edge view based on type
+	 * @param edge
+	 * @param network
+	 * @param type
+	 */
 	public void setEdgeView(CyEdge edge, CyNetwork network, String type)
 	{
 		Collection<CyNetworkView> networkViewCollection = new HashSet<CyNetworkView>();
@@ -51,6 +67,10 @@ public class EdgeViewHandler {
 		refresh(networkView);
 	}
 	
+	/**
+	 * Refreshes the networkView for the edge view changes to get reflected.
+	 * @param networkView
+	 */
 	public void refresh(CyNetworkView networkView)
 	{
 		VisualStyle style = visualMappingManager.getCurrentVisualStyle();

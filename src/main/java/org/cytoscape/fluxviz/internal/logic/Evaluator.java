@@ -9,6 +9,11 @@ import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTable;
 
+/**
+ * Creates the thread to run the "evaluate" code calculating the currOutput at every tick
+ * @author laungani
+ *
+ */
 public class Evaluator extends Thread {
 	
 	CyNetwork network;
@@ -57,6 +62,15 @@ public class Evaluator extends Thread {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param node
+	 * @param network
+	 * @param defaultEdgeTable
+	 * @param defaultNodeTable
+	 * @param hiddenNodeTable
+	 * @return nextOutput
+	 */
 	public Double evaluate(CyNode node, CyNetwork network, CyTable defaultEdgeTable, CyTable defaultNodeTable, CyTable hiddenNodeTable)
 	{
 

@@ -12,6 +12,12 @@ import org.cytoscape.model.CyTable;
 import org.cytoscape.model.events.NetworkAddedEvent;
 import org.cytoscape.model.events.NetworkAddedListener;
 
+/**
+ * 
+ * @author laungani
+ * The class handles creating app-specific columns like decay etc.
+ *
+ */
 public class ColumnsCreator implements NetworkAddedListener {
 
 	public static CyTable DefaultNodeTable;
@@ -53,6 +59,11 @@ public class ColumnsCreator implements NetworkAddedListener {
 		createColumns(network, nodeViewHandler, edgeViewHandler);
 	}
 	
+	/**
+	 * @param network the columns are created in the tables of this network
+	 * @param nodeViewHandler the object whose method will be called to set default view for nodes
+	 * @param edgeViewHandler the object whose method will be called to set default voew for edges
+	 */
 	public static void createColumns(CyNetwork network, NodeViewHandler nodeViewHandler, EdgeViewHandler edgeViewHandler)
 	{
 		//get tables

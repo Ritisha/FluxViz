@@ -12,6 +12,11 @@ public class SetTypeEdgeViewTaskFactory implements EdgeViewTaskFactory {
 	String edgeType;
 	EdgeViewHandler edgeViewHandler;
 	
+	/**
+	 * Calls the SetTypeEdgeViewTask
+	 * @param edgeType
+	 * @param edgeViewHandler
+	 */
 	public SetTypeEdgeViewTaskFactory(String edgeType, EdgeViewHandler edgeViewHandler)
 	{
 		super();

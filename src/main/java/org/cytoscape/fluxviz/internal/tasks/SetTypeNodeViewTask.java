@@ -30,6 +30,14 @@ public class SetTypeNodeViewTask extends AbstractNodeViewTask {
 	public static String RECEPTOR_T_KINASE = "ReceptorTKinase";
 	public static String PHOSPHATASE = "Phosphatase";
 	
+	/**
+	 * Sets the node type as selected by user
+	 * @param nodeView
+	 * @param networkView
+	 * @param type
+	 * @param nodeViewHandler
+	 * @param edgeViewHandler
+	 */
 	public SetTypeNodeViewTask(View<CyNode> nodeView, CyNetworkView networkView, String type, NodeViewHandler nodeViewHandler, EdgeViewHandler edgeViewHandler)
 	{
 		super(nodeView,networkView);	
@@ -58,6 +66,13 @@ public class SetTypeNodeViewTask extends AbstractNodeViewTask {
 		}
 	}
 	
+	/**
+	 * Sets defaults for outgoing edges from the node based on node type
+	 * @param edge
+	 * @param network
+	 * @param nodeType
+	 * @param edgeViewHandler
+	 */
 	public static void setDefaultsForEdgeBasedOnNodeType(CyEdge edge, CyNetwork network, String nodeType, EdgeViewHandler edgeViewHandler)
 	{
 		String edgeTypeVal = SetTypeEdgeViewTask.ACTIVATING;
@@ -116,6 +131,9 @@ public class SetTypeNodeViewTask extends AbstractNodeViewTask {
 		edgeViewHandler.setEdgeView(edge, network, nodeType);
 	}
 	
+	/**
+	 * Sets the app-specific columns to default values
+	 */
 	public void setDefaultsForNodeType()
 	{
 		CyRow row1, row2;

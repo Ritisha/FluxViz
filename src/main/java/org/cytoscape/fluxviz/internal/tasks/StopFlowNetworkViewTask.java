@@ -8,6 +8,11 @@ public class StopFlowNetworkViewTask extends AbstractNetworkViewTask {
 
 	StartFlowNetworkViewTask lastTask;
 	
+	/**
+	 * Interrupts the thread start by StartFlowNetworkViewTask
+	 * @param networkView
+	 * @param lastTask
+	 */
 	public StopFlowNetworkViewTask(CyNetworkView networkView, StartFlowNetworkViewTask lastTask)
 	{
 		super(networkView);

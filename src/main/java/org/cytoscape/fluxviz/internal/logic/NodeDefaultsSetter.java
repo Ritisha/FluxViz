@@ -11,6 +11,11 @@ import org.cytoscape.model.CyRow;
 import org.cytoscape.model.events.AddedNodesEvent;
 import org.cytoscape.model.events.AddedNodesListener;
 
+/**
+ * Sets the defaults for the app-specific columns for the existing edges and newly added edges
+ * @author laungani
+ *
+ */
 public class NodeDefaultsSetter implements AddedNodesListener {
 
 	NodeViewHandler nodeViewHandler;
@@ -29,6 +34,12 @@ public class NodeDefaultsSetter implements AddedNodesListener {
 		addDefaults(network, nodes, nodeViewHandler);
 	}
 	
+	/**
+	 * Adds defaults based on type, and calls the nodeViewHandler method to set default view
+	 * @param network
+	 * @param nodes
+	 * @param nodeViewHandler
+	 */
 	public static void addDefaults(CyNetwork network, Collection<CyNode> nodes, NodeViewHandler nodeViewHandler)
 	{
 		CyRow row;

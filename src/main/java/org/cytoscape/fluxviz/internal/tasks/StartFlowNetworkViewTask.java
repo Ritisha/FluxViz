@@ -1,17 +1,8 @@
 package org.cytoscape.fluxviz.internal.tasks;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.cytoscape.fluxviz.internal.logic.ColumnsCreator;
 import org.cytoscape.fluxviz.internal.logic.EdgeViewHandler;
 import org.cytoscape.fluxviz.internal.logic.Evaluator;
 import org.cytoscape.fluxviz.internal.logic.NodeViewHandler;
-import org.cytoscape.model.CyEdge;
-import org.cytoscape.model.CyNetwork;
-import org.cytoscape.model.CyNode;
-import org.cytoscape.model.CyRow;
-import org.cytoscape.model.CyTable;
 import org.cytoscape.task.AbstractNetworkViewTask;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.work.TaskMonitor;
@@ -23,6 +14,12 @@ public class StartFlowNetworkViewTask extends AbstractNetworkViewTask {
 	EdgeViewHandler edgeViewHandler;
 	public Evaluator evaluator;
 	
+	/**
+	 * Calls the evaluate method of the Evaluator 
+	 * @param networkView
+	 * @param nodeViewHandler
+	 * @param edgeViewHandler
+	 */
 	public StartFlowNetworkViewTask(CyNetworkView networkView, NodeViewHandler nodeViewHandler, EdgeViewHandler edgeViewHandler)
 	{
 		super(networkView);

@@ -14,6 +14,11 @@ import org.cytoscape.view.presentation.property.NodeShapeVisualProperty;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyle;
 
+/**
+ * Handles setting of node view based on type
+ * @author laungani
+ *
+ */
 public class NodeViewHandler {
 	
 	CyNetworkViewManager cyNetworkViewManager;
@@ -25,6 +30,11 @@ public class NodeViewHandler {
 		this.visualMappingManager = visualMappingManager;
 	}
 	
+	/**
+	 * Sets default node view which is that of kinase
+	 * @param node
+	 * @param network
+	 */
 	public void setDefaultNodeView(CyNode node, CyNetwork network)
 	{
 		Collection<CyNetworkView> networkViewCollection = new HashSet<CyNetworkView>();
@@ -34,6 +44,12 @@ public class NodeViewHandler {
 		refresh(networkView);
 	}
 	
+	/**
+	 * Sets node view based on type
+	 * @param nodeView
+	 * @param networkView
+	 * @param type
+	 */
 	public void setNodeView(View<CyNode> nodeView, CyNetworkView networkView, String type)
 	{
 		if(type.equals(SetTypeNodeViewTask.KINASE))

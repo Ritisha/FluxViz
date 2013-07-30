@@ -3,7 +3,6 @@ package org.cytoscape.fluxviz.internal.logic;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cytoscape.fluxviz.internal.tasks.SetTypeEdgeViewTask;
 import org.cytoscape.fluxviz.internal.tasks.SetTypeNodeViewTask;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
@@ -12,6 +11,12 @@ import org.cytoscape.model.CyRow;
 import org.cytoscape.model.events.AddedEdgesEvent;
 import org.cytoscape.model.events.AddedEdgesListener;
 
+/**
+ * 
+ * @author laungani
+ * Sets the defaults for the app-specific columns for the existing edges and newly added edges
+ *
+ */
 public class EdgeDefaultsSetter implements AddedEdgesListener {
 
 	EdgeViewHandler edgeViewHandler;
@@ -30,6 +35,12 @@ public class EdgeDefaultsSetter implements AddedEdgesListener {
 		addDefaults(network, edges, edgeViewHandler);
 	}
 	
+	/**
+	 * Since the edge defaults depend on their source node, the static method SetTypeNodeViewTask.setDefaultsForEdgeBasedOnNodeType is called in this method
+	 * @param network
+	 * @param edges
+	 * @param edgeViewHandler
+	 */
 	public static void addDefaults(CyNetwork network, Collection<CyEdge> edges, EdgeViewHandler edgeViewHandler)
 	{
 		CyRow row;

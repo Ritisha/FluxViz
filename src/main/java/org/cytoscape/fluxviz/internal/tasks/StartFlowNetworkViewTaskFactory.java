@@ -1,13 +1,11 @@
 package org.cytoscape.fluxviz.internal.tasks;
 
-import java.util.Properties;
 
 import org.cytoscape.fluxviz.internal.logic.EdgeViewHandler;
 import org.cytoscape.fluxviz.internal.logic.NodeViewHandler;
 import org.cytoscape.task.AbstractNetworkViewTaskFactory;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.work.TaskIterator;
-import static org.cytoscape.work.ServiceProperties.TITLE;
 
 
 public class StartFlowNetworkViewTaskFactory extends
@@ -15,29 +13,34 @@ public class StartFlowNetworkViewTaskFactory extends
 
 	NodeViewHandler nodeViewHandler;
 	EdgeViewHandler edgeViewHandler;
-	Properties startProps;
 	StartFlowNetworkViewTask lastTask;
+	public static String mode = "Start";
 	
-	public StartFlowNetworkViewTaskFactory(NodeViewHandler nodeViewHandler, EdgeViewHandler edgeViewHandler, Properties startProps)
+	/**
+	 * Calls the StartFlowNetworkViewTask and the StopFlowNetworkViewTask. 
+	 * @param nodeViewHandler
+	 * @param edgeViewHandler
+	 */
+	//TODO Needs cleanup
+	public StartFlowNetworkViewTaskFactory(NodeViewHandler nodeViewHandler, EdgeViewHandler edgeViewHandler)
 	{
 		super();
 		this.nodeViewHandler = nodeViewHandler;
 		this.edgeViewHandler = edgeViewHandler;
-		this.startProps = startProps;
 	}
 	@Override
 	public TaskIterator createTaskIterator(CyNetworkView networkView) {
 		
 		TaskIterator taskIterator = null;
-		if(startProps.getProperty(TITLE).equals("Start"))
+		if(mode.equals("Start"))
 		{
-			startProps.setProperty(TITLE, "Stop");
+			mode = "Stop";
 			lastTask = new StartFlowNetworkViewTask(networkView, nodeViewHandler, edgeViewHandler);
 			taskIterator = new TaskIterator(lastTask);
 		}
-		else if(startProps.getProperty(TITLE).equals("Stop"))
+		else if(mode.equals("Stop"))
 		{
-			startProps.setProperty(TITLE, "Start");
+			mode = "Start";
 			taskIterator = new TaskIterator(new StopFlowNetworkViewTask(networkView, lastTask));
 		}
 		return taskIterator;
