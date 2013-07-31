@@ -8,6 +8,7 @@ import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTable;
+import org.cytoscape.view.model.CyNetworkView;
 
 /**
  * Creates the thread to run the "evaluate" code calculating the currOutput at every tick
@@ -17,51 +18,72 @@ import org.cytoscape.model.CyTable;
 public class Evaluator extends Thread {
 	
 	CyNetwork network;
+	CyNetworkView networkView;
+	ViewHandler viewHandler;
+	boolean running;
+	int sleepTime;
 	
-	public Evaluator(CyNetwork network)
+	public Evaluator(ViewHandler viewHandler)
 	{
 		super();
-		this.network = network;
+		this.viewHandler = viewHandler;
+		sleepTime = 5;
 	}
 
-	public static void start(CyNetwork network)
+	public void startEvaluator(CyNetworkView networkView)
 	{
-		Evaluator evaluator = new Evaluator(network);
-		evaluator.start();
+		this.running = true;
+		this.networkView = networkView;
+		this.network = networkView.getModel();
+		this.start();
 	}
+	
+	public void stopEvaluator()
+	{
+		this.running = false;
+	}
+	
 	public void run()
 	{
 		List<CyNode> allNodes = new ArrayList<CyNode>();
 		allNodes = network.getNodeList();
-		CyTable hiddenNodeTable = network.getTable(CyNode.class, CyNetwork.HIDDEN_ATTRS);
-		CyTable defaultEdgeTable = network.getDefaultEdgeTable();
-		CyTable defaultNodeTable = network.getDefaultNodeTable();
 
-		while(true)
+		while(running)
 		{
 			System.out.println("now");
 			for(CyNode currNode : allNodes)
 			{
-				Double nextOutput = evaluate(currNode, network, defaultEdgeTable, defaultNodeTable, hiddenNodeTable);
-				CyRow row = hiddenNodeTable.getRow(currNode.getSUID());
+				Double nextOutput = evaluate(currNode, network, ColumnsCreator.DefaultEdgeTable, ColumnsCreator.DefaultNodeTable, ColumnsCreator.HiddenNodeTable);
+				CyRow row = ColumnsCreator.HiddenNodeTable.getRow(currNode.getSUID());
 				row.set(ColumnsCreator.NEXT_OUTPUT, nextOutput);
 			}
 			
 			for(CyNode currNode : allNodes)
 			{
-				CyRow row = hiddenNodeTable.getRow(currNode.getSUID());
+				CyRow row = ColumnsCreator.HiddenNodeTable.getRow(currNode.getSUID());
 				Double currOutput = row.get(ColumnsCreator.NEXT_OUTPUT, Double.class);
 				row.set(ColumnsCreator.CURR_OUTPUT, currOutput);
 				System.out.println(row.get(ColumnsCreator.CURR_OUTPUT, Double.class));
 			}
+			
+			viewHandler.refresh(networkView);
+			
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(sleepTime*1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 	
+	public int getSleepTime() {
+		return sleepTime;
+	}
+
+	public void setSleepTime(int sleepTime) {
+		this.sleepTime = sleepTime;
+	}
+
 	/**
 	 * 
 	 * @param node

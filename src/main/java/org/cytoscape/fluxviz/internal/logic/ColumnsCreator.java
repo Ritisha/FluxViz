@@ -42,21 +42,19 @@ public class ColumnsCreator implements NetworkAddedListener {
 	public static String EDGE_EFFICIENCY = "Edge Efficiency";
 	
 	CyNetwork network;
-	NodeViewHandler nodeViewHandler;
-	EdgeViewHandler edgeViewHandler;
+	ViewHandler viewHandler;
 
-	public ColumnsCreator(NodeViewHandler nodeViewHandler, EdgeViewHandler edgeViewHandler)
+	public ColumnsCreator(ViewHandler viewHandler)
 	{
 		super();
-		this.nodeViewHandler = nodeViewHandler;
-		this.edgeViewHandler = edgeViewHandler;
+		this.viewHandler = viewHandler;
 	}
 	
 	@Override
 	public void handleEvent(NetworkAddedEvent e) {
 
 		network = e.getNetwork();
-		createColumns(network, nodeViewHandler, edgeViewHandler);
+		createColumns(network, viewHandler);
 	}
 	
 	/**
@@ -64,7 +62,7 @@ public class ColumnsCreator implements NetworkAddedListener {
 	 * @param nodeViewHandler the object whose method will be called to set default view for nodes
 	 * @param edgeViewHandler the object whose method will be called to set default voew for edges
 	 */
-	public static void createColumns(CyNetwork network, NodeViewHandler nodeViewHandler, EdgeViewHandler edgeViewHandler)
+	public static void createColumns(CyNetwork network, ViewHandler viewHandler)
 	{
 		//get tables
 		DefaultNodeTable = network.getDefaultNodeTable();
@@ -118,7 +116,7 @@ public class ColumnsCreator implements NetworkAddedListener {
 		
 		allNodes = network.getNodeList();
 		allEdges = network.getEdgeList();
-		EdgeDefaultsSetter.addDefaults(network, allEdges, edgeViewHandler);
-		NodeDefaultsSetter.addDefaults(network, allNodes, nodeViewHandler);
+		EdgeDefaultsSetter.addDefaults(network, allEdges, viewHandler.getEdgeViewHandler());
+		NodeDefaultsSetter.addDefaults(network, allNodes, viewHandler.getNodeViewHandler());
 	}
 }

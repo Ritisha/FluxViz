@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.cytoscape.fluxviz.internal.logic.ColumnsCreator;
 import org.cytoscape.fluxviz.internal.logic.EdgeViewHandler;
-import org.cytoscape.fluxviz.internal.logic.NodeViewHandler;
+import org.cytoscape.fluxviz.internal.logic.ViewHandler;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
@@ -21,8 +21,7 @@ public class SetTypeNodeViewTask extends AbstractNodeViewTask {
 	View<CyNode> nodeView;
 	CyNetworkView networkView;
 	String type;
-	NodeViewHandler nodeViewHandler;
-	EdgeViewHandler edgeViewHandler;
+	ViewHandler viewHandler;
 	public static String KINASE = "Kinase";
 	public static String MOLECULES = "Molecules";
 	public static String GTPASE = "GTPase";
@@ -38,14 +37,13 @@ public class SetTypeNodeViewTask extends AbstractNodeViewTask {
 	 * @param nodeViewHandler
 	 * @param edgeViewHandler
 	 */
-	public SetTypeNodeViewTask(View<CyNode> nodeView, CyNetworkView networkView, String type, NodeViewHandler nodeViewHandler, EdgeViewHandler edgeViewHandler)
+	public SetTypeNodeViewTask(View<CyNode> nodeView, CyNetworkView networkView, String type, ViewHandler viewHandler)
 	{
 		super(nodeView,networkView);	
 		this.nodeView = nodeView;
 		this.networkView = networkView;
 		this.type = type;
-		this.nodeViewHandler = nodeViewHandler;
-		this.edgeViewHandler = edgeViewHandler;
+		this.viewHandler = viewHandler;
 	}
 	@Override
 	public void run(TaskMonitor tm) throws Exception {
@@ -54,7 +52,7 @@ public class SetTypeNodeViewTask extends AbstractNodeViewTask {
 		setDefaultsForNodeType();
 		
 		//update the view for node
-		nodeViewHandler.setNodeView(nodeView, networkView, type);
+		viewHandler.getNodeViewHandler().setNodeView(nodeView, networkView, type);
 		
 		//get all the outgoing edge, update their columns and views
 		List<CyEdge> outgoingEdges = new ArrayList<CyEdge>();
@@ -62,7 +60,7 @@ public class SetTypeNodeViewTask extends AbstractNodeViewTask {
 		
 		for(CyEdge currEdge : outgoingEdges)
 		{
-			setDefaultsForEdgeBasedOnNodeType(currEdge, networkView.getModel(), type, edgeViewHandler);
+			setDefaultsForEdgeBasedOnNodeType(currEdge, networkView.getModel(), type, viewHandler.getEdgeViewHandler());
 		}
 	}
 	

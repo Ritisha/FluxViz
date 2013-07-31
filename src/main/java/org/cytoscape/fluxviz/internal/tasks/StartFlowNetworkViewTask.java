@@ -1,8 +1,7 @@
 package org.cytoscape.fluxviz.internal.tasks;
 
-import org.cytoscape.fluxviz.internal.logic.EdgeViewHandler;
 import org.cytoscape.fluxviz.internal.logic.Evaluator;
-import org.cytoscape.fluxviz.internal.logic.NodeViewHandler;
+import org.cytoscape.fluxviz.internal.logic.ViewHandler;
 import org.cytoscape.task.AbstractNetworkViewTask;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.work.TaskMonitor;
@@ -10,8 +9,7 @@ import org.cytoscape.work.TaskMonitor;
 public class StartFlowNetworkViewTask extends AbstractNetworkViewTask {
 
 	CyNetworkView networkView;
-	NodeViewHandler nodeViewHandler;
-	EdgeViewHandler edgeViewHandler;
+	ViewHandler viewHandler;
 	public Evaluator evaluator;
 	
 	/**
@@ -20,17 +18,19 @@ public class StartFlowNetworkViewTask extends AbstractNetworkViewTask {
 	 * @param nodeViewHandler
 	 * @param edgeViewHandler
 	 */
-	public StartFlowNetworkViewTask(CyNetworkView networkView, NodeViewHandler nodeViewHandler, EdgeViewHandler edgeViewHandler)
+	public StartFlowNetworkViewTask(CyNetworkView networkView, ViewHandler viewHandler, Evaluator evaluator)
 	{
 		super(networkView);
 		this.networkView = networkView;
-		this.nodeViewHandler = nodeViewHandler;
-		this.edgeViewHandler = edgeViewHandler;
+		this.viewHandler = viewHandler;
+		this.evaluator = evaluator;
+		
+		//check and set visual mapping
+		viewHandler.createFluxVizStyle();
 	}
 	@Override
 	public void run(TaskMonitor tm) throws Exception {
 		
-		evaluator = new Evaluator(networkView.getModel());
-		evaluator.start();
+		evaluator.startEvaluator(networkView);
 	}
 }
