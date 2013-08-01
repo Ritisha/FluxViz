@@ -7,7 +7,6 @@ import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyRow;
-import org.cytoscape.model.CyTable;
 import org.cytoscape.view.model.CyNetworkView;
 
 /**
@@ -53,7 +52,7 @@ public class Evaluator extends Thread {
 			System.out.println("now");
 			for(CyNode currNode : allNodes)
 			{
-				Double nextOutput = evaluate(currNode, network, ColumnsCreator.DefaultEdgeTable, ColumnsCreator.DefaultNodeTable, ColumnsCreator.HiddenNodeTable);
+				Double nextOutput = evaluate(currNode, network);
 				CyRow row = ColumnsCreator.HiddenNodeTable.getRow(currNode.getSUID());
 				row.set(ColumnsCreator.NEXT_OUTPUT, nextOutput);
 			}
@@ -62,6 +61,7 @@ public class Evaluator extends Thread {
 			{
 				CyRow row = ColumnsCreator.HiddenNodeTable.getRow(currNode.getSUID());
 				Double currOutput = row.get(ColumnsCreator.NEXT_OUTPUT, Double.class);
+				row = ColumnsCreator.DefaultNodeTable.getRow(currNode.getSUID());
 				row.set(ColumnsCreator.CURR_OUTPUT, currOutput);
 				System.out.println(row.get(ColumnsCreator.CURR_OUTPUT, Double.class));
 			}
@@ -93,7 +93,7 @@ public class Evaluator extends Thread {
 	 * @param hiddenNodeTable
 	 * @return nextOutput
 	 */
-	public Double evaluate(CyNode node, CyNetwork network, CyTable defaultEdgeTable, CyTable defaultNodeTable, CyTable hiddenNodeTable)
+	public Double evaluate(CyNode node, CyNetwork network)
 	{
 
 		Double v = new Double(0.0);
@@ -116,15 +116,14 @@ public class Evaluator extends Thread {
 
 		for(CyEdge currEdge : incomingEdges)
 		{
-			row = defaultEdgeTable.getRow(currEdge.getSUID());
+			row = ColumnsCreator.DefaultEdgeTable.getRow(currEdge.getSUID());
 			edgeType = row.get(ColumnsCreator.EDGE_TYPE, String.class);
 			edgeEfficiency = row.get(ColumnsCreator.EDGE_EFFICIENCY, Double.class);
 			
 			CyNode sourceNode = currEdge.getSource();
-			row = hiddenNodeTable.getRow(sourceNode.getSUID());
+			row = ColumnsCreator.DefaultNodeTable.getRow(sourceNode.getSUID());
 			edgeSourceOutput = row.get(ColumnsCreator.CURR_OUTPUT, Double.class);
 			
-			row = defaultNodeTable.getRow(sourceNode.getSUID());
 			List<Double> edgeSourceNodePortEfficiencyList = new ArrayList<Double>();
 			edgeSourceNodePortEfficiencyList = row.getList(ColumnsCreator.PORT_EFFICIENCY, Double.class);
 			edgeSourcePort1Efficiency = edgeSourceNodePortEfficiencyList.get(0);
@@ -139,10 +138,8 @@ public class Evaluator extends Thread {
 			}
 		}
 		
-		row = hiddenNodeTable.getRow(node.getSUID());
+		row = ColumnsCreator.DefaultNodeTable.getRow(node.getSUID());
 		currentOutput = row.get(ColumnsCreator.CURR_OUTPUT, Double.class);
-		
-		row = defaultNodeTable.getRow(node.getSUID());
 		timeRamp = row.get(ColumnsCreator.TIME_RAMP, Double.class);
 		relativeConc = row.get(ColumnsCreator.RELATIVE_CONCENTRATION, Double.class);
 		decay = row.get(ColumnsCreator.DECAY, Double.class);
@@ -154,5 +151,4 @@ public class Evaluator extends Thread {
 		}
 		return newV;
 	}
-
 }

@@ -23,11 +23,10 @@ public class FluxVizNetworkViewTaskFactory extends AbstractNetworkViewTaskFactor
 	 * @param edgeViewHandler
 	 */
 	//TODO Needs cleanup
-	public FluxVizNetworkViewTaskFactory(ViewHandler viewHandler, Evaluator evaluator, Properties properties)
+	public FluxVizNetworkViewTaskFactory(ViewHandler viewHandler, Properties properties)
 	{
 		super();
 		this.viewHandler = viewHandler;
-		this.evaluator = evaluator;
 		this.properties = properties;
 	}
 	@Override
@@ -36,6 +35,7 @@ public class FluxVizNetworkViewTaskFactory extends AbstractNetworkViewTaskFactor
 		TaskIterator taskIterator = null;
 		if(properties.get(TITLE).equals("Start1"))
 		{
+			evaluator = new Evaluator(viewHandler);
 			properties.setProperty(TITLE, "Stop");
 			viewHandler.refresh(networkView);
 			taskIterator = new TaskIterator(new StartFlowNetworkViewTask(networkView, viewHandler, evaluator));

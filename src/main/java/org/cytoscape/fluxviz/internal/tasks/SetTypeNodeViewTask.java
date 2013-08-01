@@ -247,8 +247,7 @@ public class SetTypeNodeViewTask extends AbstractNodeViewTask {
 		row1.set(ColumnsCreator.PORT_EFFICIENCY, portEfficiency);
 		row1.set(ColumnsCreator.INTEGER_OUTPUT_NODE_THRESH, intOutputNodeThreshVal);
 		row1.set(ColumnsCreator.UPPER_BOUND, upperBoundVal);
-		
-		row2.set(ColumnsCreator.CURR_OUTPUT, currOutputVal);
+		row1.set(ColumnsCreator.CURR_OUTPUT, currOutputVal);
 		row2.set(ColumnsCreator.NEXT_OUTPUT, nextOutputVal);	
 	}
 }

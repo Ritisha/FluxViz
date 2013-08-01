@@ -33,7 +33,6 @@ public class ColumnsCreator implements NetworkAddedListener {
 	public static String PORT_EFFICIENCY = "Port Efficiency";
 	public static String INTEGER_OUTPUT_NODE_THRESH = "Integer Output Node Threshold";
 	public static String UPPER_BOUND = "Upper Bound";
-	
 	public static String CURR_OUTPUT = "Current Output";
 	public static String NEXT_OUTPUT = "Next Output";
 	
@@ -99,8 +98,8 @@ public class ColumnsCreator implements NetworkAddedListener {
 		if(DefaultNodeTable.getColumn(UPPER_BOUND) == null)
 			DefaultNodeTable.createColumn(UPPER_BOUND, Double.class, true, 1.0);
 		
-		if(HiddenNodeTable.getColumn(CURR_OUTPUT) == null)
-			HiddenNodeTable.createColumn(CURR_OUTPUT, Double.class, true, 0.5);
+		if(DefaultNodeTable.getColumn(CURR_OUTPUT) == null)
+			DefaultNodeTable.createColumn(CURR_OUTPUT, Double.class, true, 0.5);
 		
 		if(HiddenNodeTable.getColumn(NEXT_OUTPUT) == null)
 			HiddenNodeTable.createColumn(NEXT_OUTPUT, Double.class, true, 0.0);

@@ -162,7 +162,6 @@ public class CyActivator extends AbstractCyActivator {
 				EdgeViewTaskFactory.class, deactivatingProps);	
 
 		//add fluxviz menu to network context menu
-		Evaluator evaluator = new Evaluator(viewHandler);
 		Properties startProps = new Properties();
 		startProps.setProperty(PREFERRED_ACTION, "NEW");
 		startProps.setProperty(PREFERRED_MENU, "Apps.FluxViz");
@@ -170,7 +169,7 @@ public class CyActivator extends AbstractCyActivator {
 		startProps.setProperty(IN_MENU_BAR, "false");
 		startProps.setProperty(TITLE, "Start1");
 
-		cyServiceRegistrar.registerService(new FluxVizNetworkViewTaskFactory(viewHandler, evaluator, startProps), NetworkViewTaskFactory.class, startProps);
+		cyServiceRegistrar.registerService(new FluxVizNetworkViewTaskFactory(viewHandler, startProps), NetworkViewTaskFactory.class, startProps);
 
 		//add the continuous visual mapping for node color mapped with currOutput
 		viewHandler.createVisualMapping();
