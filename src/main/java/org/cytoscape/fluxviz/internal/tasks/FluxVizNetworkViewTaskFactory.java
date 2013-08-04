@@ -33,7 +33,7 @@ public class FluxVizNetworkViewTaskFactory extends AbstractNetworkViewTaskFactor
 	public TaskIterator createTaskIterator(CyNetworkView networkView) {
 		
 		TaskIterator taskIterator = null;
-		if(properties.get(TITLE).equals("Start1"))
+		if(properties.get(TITLE).equals("Start"))
 		{
 			evaluator = new Evaluator(viewHandler);
 			properties.setProperty(TITLE, "Stop");
@@ -42,7 +42,7 @@ public class FluxVizNetworkViewTaskFactory extends AbstractNetworkViewTaskFactor
 		}
 		else if(properties.get(TITLE).equals("Stop"))
 		{
-			properties.setProperty(TITLE, "Start1");
+			properties.setProperty(TITLE, "Start");
 			viewHandler.refresh(networkView);
 			taskIterator = new TaskIterator(new StopFlowNetworkViewTask(networkView, evaluator));
 		}

@@ -39,6 +39,7 @@ public class ColumnsCreator implements NetworkAddedListener {
 	public static String EDGE_TYPE = "Edge Type";
 	public static String TARGET_INPUT = "Target Input";
 	public static String EDGE_EFFICIENCY = "Edge Efficiency";
+	public static String EDGE_TARGET_NODE_OUTPUT = "Target Node Output";
 	
 	CyNetwork network;
 	ViewHandler viewHandler;
@@ -112,6 +113,9 @@ public class ColumnsCreator implements NetworkAddedListener {
 		
 		if(DefaultEdgeTable.getColumn(EDGE_EFFICIENCY) == null)
 			DefaultEdgeTable.createColumn(EDGE_EFFICIENCY, Double.class, true, 1.0);
+		
+		if(DefaultEdgeTable.getColumn(EDGE_TARGET_NODE_OUTPUT) == null)
+			DefaultEdgeTable.createColumn(EDGE_TARGET_NODE_OUTPUT, Double.class, true, 0.5);
 		
 		allNodes = network.getNodeList();
 		allEdges = network.getEdgeList();

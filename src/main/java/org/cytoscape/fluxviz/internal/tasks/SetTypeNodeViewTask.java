@@ -77,6 +77,10 @@ public class SetTypeNodeViewTask extends AbstractNodeViewTask {
 		double edgeEfficiencyVal = 1.0;
 		int targetInputVal = 1;
 		
+		//getting the target node output
+		CyNode targetNode = edge.getTarget();
+		double edgeTargetNodeOutputVal = ColumnsCreator.DefaultNodeTable.getRow(targetNode.getSUID()).get(ColumnsCreator.CURR_OUTPUT, Double.class);
+		
 		if(nodeType.equals(KINASE))
 		{
 			edgeTypeVal = SetTypeEdgeViewTask.ACTIVATING;
@@ -124,6 +128,7 @@ public class SetTypeNodeViewTask extends AbstractNodeViewTask {
 		row.set(ColumnsCreator.EDGE_TYPE, edgeTypeVal);
 		row.set(ColumnsCreator.EDGE_EFFICIENCY, edgeEfficiencyVal);
 		row.set(ColumnsCreator.TARGET_INPUT, targetInputVal);
+		row.set(ColumnsCreator.EDGE_TARGET_NODE_OUTPUT, edgeTargetNodeOutputVal);
 		
 		//set the edge view
 		edgeViewHandler.setEdgeView(edge, network, nodeType);

@@ -6,10 +6,15 @@ import static org.cytoscape.work.ServiceProperties.PREFERRED_ACTION;
 import static org.cytoscape.work.ServiceProperties.PREFERRED_MENU;
 import static org.cytoscape.work.ServiceProperties.TITLE;
 
+import java.awt.Color;
+import java.awt.Paint;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import org.cytoscape.application.CyApplicationManager;
 import org.cytoscape.fluxviz.internal.logic.ColumnsCreator;
 import org.cytoscape.fluxviz.internal.logic.EdgeDefaultsSetter;
 import org.cytoscape.fluxviz.internal.logic.Evaluator;
@@ -22,6 +27,7 @@ import org.cytoscape.fluxviz.internal.tasks.SetTypeNodeViewTaskFactory;
 import org.cytoscape.fluxviz.internal.tasks.FluxVizNetworkViewTaskFactory;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNetworkManager;
+import org.cytoscape.model.CyNode;
 import org.cytoscape.model.events.AddedEdgesListener;
 import org.cytoscape.model.events.AddedNodesListener;
 import org.cytoscape.model.events.NetworkAddedListener;
@@ -31,9 +37,12 @@ import org.cytoscape.task.EdgeViewTaskFactory;
 import org.cytoscape.task.NetworkViewTaskFactory;
 import org.cytoscape.task.NodeViewTaskFactory;
 import org.cytoscape.view.model.CyNetworkViewManager;
+import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyleFactory;
+import org.cytoscape.view.vizmap.mappings.BoundaryRangeValues;
+import org.cytoscape.view.vizmap.mappings.ContinuousMapping;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -58,9 +67,9 @@ public class CyActivator extends AbstractCyActivator {
 		CyNetworkViewManager cyNetworkViewManager = getService(context, CyNetworkViewManager.class);
 		VisualMappingFunctionFactory continousVisualMappingFunctionFactory = getService(context, VisualMappingFunctionFactory.class, "(mapping.type=continuous)");
 		VisualStyleFactory visualStyleFactory = getService(context, VisualStyleFactory.class);
+		//CyApplicationManager cyApplicationManager = getService(context, CyApplicationManager.class);
 
 		ViewHandler viewHandler = new ViewHandler(cyNetworkViewManager, visualMappingManager, visualStyleFactory, continousVisualMappingFunctionFactory);
-
 
 		//add app-specific columns to default tables
 		Set<CyNetwork> allNets = new HashSet<CyNetwork>();
@@ -167,12 +176,37 @@ public class CyActivator extends AbstractCyActivator {
 		startProps.setProperty(PREFERRED_MENU, "Apps.FluxViz");
 		startProps.setProperty(MENU_GRAVITY, "10.0f");
 		startProps.setProperty(IN_MENU_BAR, "false");
-		startProps.setProperty(TITLE, "Start1");
+		startProps.setProperty(TITLE, "Start");
 
 		cyServiceRegistrar.registerService(new FluxVizNetworkViewTaskFactory(viewHandler, startProps), NetworkViewTaskFactory.class, startProps);
 
 		//add the continuous visual mapping for node color mapped with currOutput
-		viewHandler.createVisualMapping();
+		//ContinuousMapping<Double, Paint> tempMapping = (ContinuousMapping<Double, Paint>) continousVisualMappingFunctionFactory.createVisualMappingFunction(ColumnsCreator.CURR_OUTPUT, Double.class, BasicVisualLexicon.NODE_FILL_COLOR);
+
+//		Double val1 = 0d;
+//		Double val2 = 1d;
+//		Double val3 = 5d;
+//		BoundaryRangeValues<Paint> brv1 = new BoundaryRangeValues<Paint>(Color.GRAY, Color.GRAY, Color.DARK_GRAY);
+//		BoundaryRangeValues<Paint> brv2 = new BoundaryRangeValues<Paint>(Color.GREEN, Color.GREEN, Color.GREEN);
+//		BoundaryRangeValues<Paint> brv3 = new BoundaryRangeValues<Paint>(Color.RED, Color.RED, Color.RED);
+//
+//		tempMapping.addPoint(val1, brv1);
+//		tempMapping.addPoint(val2, brv2);
+//		tempMapping.addPoint(val3, brv3);
+//		
+//		CyNetwork tempNet = cyApplicationManager.getCurrentNetwork();
+//		List<CyNode> allNodes = new ArrayList<CyNode>();
+//		allNodes = tempNet.getNodeList();
+//		boolean temp = true;
+//		for(CyNode currNode : allNodes)
+//		{
+//			temp = !temp;
+//			if(temp)
+//			{
+//				tempMapping.apply(ColumnsCreator.DefaultNodeTable.getRow(currNode.getSUID()), cyApplicationManager.getCurrentNetworkView().getNodeView(currNode));
+//			}
+//		}
+		viewHandler.createVisualMappings();
 		viewHandler.createFluxVizStyle();
 	}
 }
