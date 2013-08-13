@@ -7,6 +7,8 @@ import org.cytoscape.fluxviz.internal.logic.ViewHandler;
 import org.cytoscape.task.AbstractNetworkViewTaskFactory;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.work.TaskIterator;
+import org.cytoscape.work.Tunable;
+
 import static org.cytoscape.work.ServiceProperties.TITLE;
 
 
@@ -33,7 +35,7 @@ public class FluxVizNetworkViewTaskFactory extends AbstractNetworkViewTaskFactor
 	public TaskIterator createTaskIterator(CyNetworkView networkView) {
 		
 		TaskIterator taskIterator = null;
-		if(properties.get(TITLE).equals("Start"))
+		if(properties.get(TITLE).equals("Start4"))
 		{
 			evaluator = new Evaluator(viewHandler);
 			properties.setProperty(TITLE, "Stop");
@@ -42,7 +44,7 @@ public class FluxVizNetworkViewTaskFactory extends AbstractNetworkViewTaskFactor
 		}
 		else if(properties.get(TITLE).equals("Stop"))
 		{
-			properties.setProperty(TITLE, "Start");
+			properties.setProperty(TITLE, "Start4");
 			viewHandler.refresh(networkView);
 			taskIterator = new TaskIterator(new StopFlowNetworkViewTask(networkView, evaluator));
 		}

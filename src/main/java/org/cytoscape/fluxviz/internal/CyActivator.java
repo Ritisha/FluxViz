@@ -43,6 +43,7 @@ import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyleFactory;
 import org.cytoscape.view.vizmap.mappings.BoundaryRangeValues;
 import org.cytoscape.view.vizmap.mappings.ContinuousMapping;
+import org.cytoscape.work.Tunable;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -80,6 +81,7 @@ public class CyActivator extends AbstractCyActivator {
 			ColumnsCreator.createColumns(currNet, viewHandler);		
 		}
 
+		//dont do it this way. use registerService normalle
 		cyServiceRegistrar.registerService(new ColumnsCreator(viewHandler), NetworkAddedListener.class, new Properties() );
 
 		//set defaults for attributes of newly added nodes
@@ -176,7 +178,7 @@ public class CyActivator extends AbstractCyActivator {
 		startProps.setProperty(PREFERRED_MENU, "Apps.FluxViz");
 		startProps.setProperty(MENU_GRAVITY, "10.0f");
 		startProps.setProperty(IN_MENU_BAR, "false");
-		startProps.setProperty(TITLE, "Start");
+		startProps.setProperty(TITLE, "Start4");
 
 		cyServiceRegistrar.registerService(new FluxVizNetworkViewTaskFactory(viewHandler, startProps), NetworkViewTaskFactory.class, startProps);
 
@@ -207,6 +209,6 @@ public class CyActivator extends AbstractCyActivator {
 //			}
 //		}
 		viewHandler.createVisualMappings();
-		viewHandler.createFluxVizStyle();
+		viewHandler.createFluxVizStyle();		
 	}
 }

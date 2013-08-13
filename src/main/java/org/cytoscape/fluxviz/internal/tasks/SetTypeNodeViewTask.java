@@ -52,7 +52,7 @@ public class SetTypeNodeViewTask extends AbstractNodeViewTask {
 		setDefaultsForNodeType();
 		
 		//update the view for node
-		viewHandler.getNodeViewHandler().setNodeView(nodeView, networkView, type);
+		viewHandler.getNodeViewHandler().setNodeView(nodeView.getModel(), networkView.getModel(), type);
 		
 		//get all the outgoing edge, update their columns and views
 		List<CyEdge> outgoingEdges = new ArrayList<CyEdge>();
@@ -77,9 +77,9 @@ public class SetTypeNodeViewTask extends AbstractNodeViewTask {
 		double edgeEfficiencyVal = 1.0;
 		int targetInputVal = 1;
 		
-		//getting the target node output
-		CyNode targetNode = edge.getTarget();
-		double edgeTargetNodeOutputVal = ColumnsCreator.DefaultNodeTable.getRow(targetNode.getSUID()).get(ColumnsCreator.CURR_OUTPUT, Double.class);
+		//getting the source node output
+		CyNode sourceNode = edge.getSource();
+		double edgeSourceNodeOutputVal = ColumnsCreator.DefaultNodeTable.getRow(sourceNode.getSUID()).get(ColumnsCreator.CURR_OUTPUT, Double.class);
 		
 		if(nodeType.equals(KINASE))
 		{
@@ -125,13 +125,20 @@ public class SetTypeNodeViewTask extends AbstractNodeViewTask {
 
 		CyRow row = ColumnsCreator.DefaultEdgeTable.getRow(edge.getSUID());
 		
-		row.set(ColumnsCreator.EDGE_TYPE, edgeTypeVal);
-		row.set(ColumnsCreator.EDGE_EFFICIENCY, edgeEfficiencyVal);
-		row.set(ColumnsCreator.TARGET_INPUT, targetInputVal);
-		row.set(ColumnsCreator.EDGE_TARGET_NODE_OUTPUT, edgeTargetNodeOutputVal);
+		if(!row.isSet(ColumnsCreator.EDGE_TYPE))
+			row.set(ColumnsCreator.EDGE_TYPE, edgeTypeVal);
+		
+		if(!row.isSet(ColumnsCreator.EDGE_EFFICIENCY))
+			row.set(ColumnsCreator.EDGE_EFFICIENCY, edgeEfficiencyVal);
+		
+		if(!row.isSet(ColumnsCreator.TARGET_INPUT))
+			row.set(ColumnsCreator.TARGET_INPUT, targetInputVal);
+		
+		if(!row.isSet(ColumnsCreator.EDGE_SOURCE_NODE_OUTPUT))
+			row.set(ColumnsCreator.EDGE_SOURCE_NODE_OUTPUT, edgeSourceNodeOutputVal);
 		
 		//set the edge view
-		edgeViewHandler.setEdgeView(edge, network, nodeType);
+		edgeViewHandler.setEdgeView(edge, network, row.get(ColumnsCreator.EDGE_TYPE, String.class));
 	}
 	
 	/**

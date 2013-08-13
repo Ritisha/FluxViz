@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cytoscape.fluxviz.internal.tasks.SetTypeEdgeViewTask;
+import org.cytoscape.fluxviz.internal.tasks.SetTypeNodeViewTask;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
@@ -39,7 +40,7 @@ public class ColumnsCreator implements NetworkAddedListener {
 	public static String EDGE_TYPE = "Edge Type";
 	public static String TARGET_INPUT = "Target Input";
 	public static String EDGE_EFFICIENCY = "Edge Efficiency";
-	public static String EDGE_TARGET_NODE_OUTPUT = "Target Node Output";
+	public static String EDGE_SOURCE_NODE_OUTPUT = "Source Node Output";
 	
 	CyNetwork network;
 	ViewHandler viewHandler;
@@ -73,7 +74,7 @@ public class ColumnsCreator implements NetworkAddedListener {
 		
 		//add columns
 		if(DefaultNodeTable.getColumn(NODE_TYPE) == null)
-			DefaultNodeTable.createColumn(NODE_TYPE, String.class, true, "Kinase");
+			DefaultNodeTable.createColumn(NODE_TYPE, String.class, true, SetTypeNodeViewTask.KINASE);
 
 		if(DefaultNodeTable.getColumn(NUM_OF_INPUTS) == null)
 			DefaultNodeTable.createColumn(NUM_OF_INPUTS, Integer.class, true, 1);
@@ -114,8 +115,8 @@ public class ColumnsCreator implements NetworkAddedListener {
 		if(DefaultEdgeTable.getColumn(EDGE_EFFICIENCY) == null)
 			DefaultEdgeTable.createColumn(EDGE_EFFICIENCY, Double.class, true, 1.0);
 		
-		if(DefaultEdgeTable.getColumn(EDGE_TARGET_NODE_OUTPUT) == null)
-			DefaultEdgeTable.createColumn(EDGE_TARGET_NODE_OUTPUT, Double.class, true, 0.5);
+		if(DefaultEdgeTable.getColumn(EDGE_SOURCE_NODE_OUTPUT) == null)
+			DefaultEdgeTable.createColumn(EDGE_SOURCE_NODE_OUTPUT, Double.class, true, 0.5);
 		
 		allNodes = network.getNodeList();
 		allEdges = network.getEdgeList();

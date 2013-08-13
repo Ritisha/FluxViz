@@ -56,12 +56,12 @@ public class ViewHandler {
 		continuousCurrOutputNodeFillColorMapping.addPoint(val2, brv2);
 		continuousCurrOutputNodeFillColorMapping.addPoint(val3, brv3);
 		
-		activatingEdgeMapping = (ContinuousMapping<Double, Paint>) continousVisualMappingFunctionFactory.createVisualMappingFunction(ColumnsCreator.EDGE_TARGET_NODE_OUTPUT, Double.class, BasicVisualLexicon.EDGE_STROKE_UNSELECTED_PAINT);
+		activatingEdgeMapping = (ContinuousMapping<Double, Paint>) continousVisualMappingFunctionFactory.createVisualMappingFunction(ColumnsCreator.EDGE_SOURCE_NODE_OUTPUT, Double.class, BasicVisualLexicon.EDGE_STROKE_UNSELECTED_PAINT);
 		activatingEdgeMapping.addPoint(val1, brv1);
 		activatingEdgeMapping.addPoint(val2, brv2);
 		activatingEdgeMapping.addPoint(val3, brv4);
 		
-		deactivatingEdgeMapping = (ContinuousMapping<Double, Paint>) continousVisualMappingFunctionFactory.createVisualMappingFunction(ColumnsCreator.EDGE_TARGET_NODE_OUTPUT, Double.class, BasicVisualLexicon.EDGE_STROKE_UNSELECTED_PAINT);
+		deactivatingEdgeMapping = (ContinuousMapping<Double, Paint>) continousVisualMappingFunctionFactory.createVisualMappingFunction(ColumnsCreator.EDGE_SOURCE_NODE_OUTPUT, Double.class, BasicVisualLexicon.EDGE_STROKE_UNSELECTED_PAINT);
 		deactivatingEdgeMapping.addPoint(val1, brv5);
 		deactivatingEdgeMapping.addPoint(val2, brv1);
 		deactivatingEdgeMapping.addPoint(val3, brv6);

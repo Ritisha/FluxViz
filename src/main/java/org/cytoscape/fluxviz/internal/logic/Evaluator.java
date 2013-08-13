@@ -26,7 +26,7 @@ public class Evaluator extends Thread {
 	{
 		super();
 		this.viewHandler = viewHandler;
-		sleepTime = 5;
+		sleepTime = 2;
 	}
 
 	public void startEvaluator(CyNetworkView networkView)
@@ -64,14 +64,14 @@ public class Evaluator extends Thread {
 				row = ColumnsCreator.DefaultNodeTable.getRow(currNode.getSUID());
 				row.set(ColumnsCreator.CURR_OUTPUT, currOutput);
 				 
-				//Set the EDGE_TARGET_NODE_OUTPUT for all incoming edges
-				List<CyEdge> incomingEdges = new ArrayList<CyEdge>();
-				incomingEdges = network.getAdjacentEdgeList(currNode, CyEdge.Type.INCOMING);
-				for(CyEdge currEdge : incomingEdges)
+				//Set the EDGE_SOURCE_NODE_OUTPUT for all outgoing edges
+				List<CyEdge> outgoingEdges = new ArrayList<CyEdge>();
+				outgoingEdges = network.getAdjacentEdgeList(currNode, CyEdge.Type.OUTGOING);
+				for(CyEdge currEdge : outgoingEdges)
 				{
 					row = ColumnsCreator.DefaultEdgeTable.getRow(currEdge.getSUID());
-					row.set(ColumnsCreator.EDGE_TARGET_NODE_OUTPUT, currOutput);
-					System.out.println(row.get(ColumnsCreator.EDGE_TARGET_NODE_OUTPUT, Double.class));
+					row.set(ColumnsCreator.EDGE_SOURCE_NODE_OUTPUT, currOutput);
+					System.out.println(row.get(ColumnsCreator.EDGE_SOURCE_NODE_OUTPUT, Double.class));
 				}
 			}
 			

@@ -77,12 +77,17 @@ public class NodeDefaultsSetter implements AddedNodesListener {
 			if(!row.isSet(ColumnsCreator.UPPER_BOUND))
 				row.set(ColumnsCreator.UPPER_BOUND, 1.0);
 			
-			row.set(ColumnsCreator.CURR_OUTPUT, 0.5);
+			if(!row.isSet(ColumnsCreator.CURR_OUTPUT))
+				row.set(ColumnsCreator.CURR_OUTPUT, 0.5);
+			
+			String type = row.get(ColumnsCreator.NODE_TYPE, String.class);
 			
 			row = ColumnsCreator.HiddenNodeTable.getRow(currNode.getSUID());
-			row.set(ColumnsCreator.NEXT_OUTPUT, 0.0);	
 			
-			nodeViewHandler.setDefaultNodeView(currNode, network);
+			if(!row.isSet(ColumnsCreator.NEXT_OUTPUT))
+				row.set(ColumnsCreator.NEXT_OUTPUT, 0.0);	
+			
+			nodeViewHandler.setNodeView(currNode, network, type);
 		}
 	}
 

@@ -50,8 +50,13 @@ public class NodeViewHandler {
 	 * @param networkView
 	 * @param type
 	 */
-	public void setNodeView(View<CyNode> nodeView, CyNetworkView networkView, String type)
+	public void setNodeView(CyNode node, CyNetwork network, String type)
 	{
+		Collection<CyNetworkView> networkViewCollection = new HashSet<CyNetworkView>();
+		networkViewCollection = cyNetworkViewManager.getNetworkViews(network);
+		CyNetworkView networkView = networkViewCollection.iterator().next();
+		View<CyNode> nodeView = networkView.getNodeView(node);
+		
 		if(type.equals(SetTypeNodeViewTask.KINASE))
 		{
 			nodeView.setLockedValue(BasicVisualLexicon.NODE_SHAPE, NodeShapeVisualProperty.DIAMOND);
