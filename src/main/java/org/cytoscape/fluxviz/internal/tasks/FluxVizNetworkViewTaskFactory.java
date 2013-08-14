@@ -2,6 +2,7 @@ package org.cytoscape.fluxviz.internal.tasks;
 
 import java.util.Properties;
 
+import org.cytoscape.fluxviz.internal.logic.Context;
 import org.cytoscape.fluxviz.internal.logic.Evaluator;
 import org.cytoscape.fluxviz.internal.logic.ViewHandler;
 import org.cytoscape.task.AbstractNetworkViewTaskFactory;
@@ -17,6 +18,7 @@ public class FluxVizNetworkViewTaskFactory extends AbstractNetworkViewTaskFactor
 	ViewHandler viewHandler;
 	Evaluator evaluator;
 	Properties properties;
+	Context appContext;
 	String mode = "Start";
 	
 	/**
@@ -25,12 +27,19 @@ public class FluxVizNetworkViewTaskFactory extends AbstractNetworkViewTaskFactor
 	 * @param edgeViewHandler
 	 */
 	//TODO Needs cleanup
-	public FluxVizNetworkViewTaskFactory(ViewHandler viewHandler, Properties properties)
+	public FluxVizNetworkViewTaskFactory(ViewHandler viewHandler, Properties properties, Context appContext)
 	{
 		super();
 		this.viewHandler = viewHandler;
 		this.properties = properties;
+		this.appContext = appContext;
 	}
+	
+	public boolean isReady(CyNetworkView networkView)
+	{
+		return appContext.containsNetwork(networkView.getModel());
+	}
+	
 	@Override
 	public TaskIterator createTaskIterator(CyNetworkView networkView) {
 		
