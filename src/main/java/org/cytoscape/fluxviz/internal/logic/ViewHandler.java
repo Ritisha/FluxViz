@@ -50,7 +50,8 @@ public class ViewHandler {
 		Double val2 = 1d;
 		Double val3 = 5d;
 		
-		BoundaryRangeValues<Paint> brv1 = new BoundaryRangeValues<Paint>(Color.GRAY, Color.GRAY, Color.GRAY);
+		Color lightGray = new Color(240, 240, 240);
+		BoundaryRangeValues<Paint> brv1 = new BoundaryRangeValues<Paint>(lightGray, lightGray, lightGray);
 		BoundaryRangeValues<Paint> brv2 = new BoundaryRangeValues<Paint>(Color.GREEN, Color.GREEN, Color.GREEN);
 		BoundaryRangeValues<Paint> brv3 = new BoundaryRangeValues<Paint>(Color.RED, Color.RED, Color.RED);
 		BoundaryRangeValues<Paint> brv4 = new BoundaryRangeValues<Paint>(Color.BLUE, Color.BLUE, Color.BLUE);
@@ -112,23 +113,12 @@ public class ViewHandler {
 			if(currEdgeType.equals(SetTypeEdgeViewTask.ACTIVATING))
 			{
 				activatingEdgeMapping.apply(row, networkView.getEdgeView(currEdge));
-				System.out.println("activatingEdgeMapping");
 			}
 			else if(currEdgeType.equals(SetTypeEdgeViewTask.DEACTIVATING))
 			{
 				deactivatingEdgeMapping.apply(row, networkView.getEdgeView(currEdge));
-				System.out.println("deactivatingEdgeMapping");
 			}
 		}
-	}
-	
-	public ContinuousMapping<Double, Paint> getContinuousCurrOutputNodeFillColorMapping() {
-		return currOutputNodeFillColorMapping;
-	}
-
-	public void setContinuousCurrOutputNodeFillColorMapping(
-			ContinuousMapping<Double, Paint> continuousCurrOutputNodeFillColorMapping) {
-		this.currOutputNodeFillColorMapping = continuousCurrOutputNodeFillColorMapping;
 	}
 
 	public NodeViewHandler getNodeViewHandler() {

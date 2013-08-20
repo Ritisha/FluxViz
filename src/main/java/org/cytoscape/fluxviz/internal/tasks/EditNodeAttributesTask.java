@@ -1,5 +1,8 @@
 package org.cytoscape.fluxviz.internal.tasks;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.cytoscape.fluxviz.internal.logic.ColumnsCreator;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.model.CyRow;
@@ -21,14 +24,14 @@ public class EditNodeAttributesTask extends AbstractNodeViewTask {
 	public double relativeConc;
 	@Tunable(description = "Decay")
 	public double decay;
-//	@Tunable(description = "Initial Output Value")
-//	public double initialOutputValue;
-//	@Tunable(description = "Port Efficiency")
-//	public double portEfficiency;
-//	@Tunable(description = "Integer Output Node Threshold")
-//	public double intOutputNodeThresh;
-//	@Tunable(description = "Upper Bound")
-//	public double upperBound;
+	@Tunable(description = "Initial Output Value")
+	public double initialOutputValue;
+	@Tunable(description = "Port Efficiency")
+	public List<Double> portEfficiency;
+	@Tunable(description = "Integer Output Node Threshold")
+	public double intOutputNodeThresh;
+	@Tunable(description = "Upper Bound")
+	public double upperBound;
 	
 	CyRow row;
 	
@@ -41,10 +44,11 @@ public class EditNodeAttributesTask extends AbstractNodeViewTask {
 		timeRamp = row.get(ColumnsCreator.TIME_RAMP, Double.class);
 		relativeConc = row.get(ColumnsCreator.RELATIVE_CONCENTRATION, Double.class);
 		decay = row.get(ColumnsCreator.DECAY, Double.class);
-//		initialOutputValue = row.get(ColumnsCreator.INITIAL_OUTPUT_VALUE, Double.class);
-//		portEfficiency = row.get(ColumnsCreator.PORT_EFFICIENCY, Double.class);
-//		intOutputNodeThresh = row.get(ColumnsCreator.INTEGER_OUTPUT_NODE_THRESH, Double.class);
-//		upperBound = row.get(ColumnsCreator.UPPER_BOUND, Double.class);
+		initialOutputValue = row.get(ColumnsCreator.INITIAL_OUTPUT_VALUE, Double.class);
+		portEfficiency = new ArrayList<Double>();
+		portEfficiency = row.getList(ColumnsCreator.PORT_EFFICIENCY, Double.class);
+		intOutputNodeThresh = row.get(ColumnsCreator.INTEGER_OUTPUT_NODE_THRESH, Double.class);
+		upperBound = row.get(ColumnsCreator.UPPER_BOUND, Double.class);
 	}
 	
 	@Override
@@ -54,10 +58,10 @@ public class EditNodeAttributesTask extends AbstractNodeViewTask {
 		row.set(ColumnsCreator.TIME_RAMP, timeRamp);
 		row.set(ColumnsCreator.RELATIVE_CONCENTRATION, relativeConc);
 		row.set(ColumnsCreator.DECAY, decay);
-//		row.set(ColumnsCreator.INITIAL_OUTPUT_VALUE, initialOutputValue);
-//		row.set(ColumnsCreator.PORT_EFFICIENCY, portEfficiency);
-//		row.set(ColumnsCreator.INTEGER_OUTPUT_NODE_THRESH, intOutputNodeThresh);
-//		row.set(ColumnsCreator.UPPER_BOUND, upperBound);
+		row.set(ColumnsCreator.INITIAL_OUTPUT_VALUE, initialOutputValue);
+		row.set(ColumnsCreator.PORT_EFFICIENCY, portEfficiency);
+		row.set(ColumnsCreator.INTEGER_OUTPUT_NODE_THRESH, intOutputNodeThresh);
+		row.set(ColumnsCreator.UPPER_BOUND, upperBound);
 	}
 
 }

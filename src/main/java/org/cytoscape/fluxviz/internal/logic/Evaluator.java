@@ -83,7 +83,6 @@ public class Evaluator extends Thread {
 				{
 					row = ColumnsCreator.DefaultEdgeTable.getRow(currEdge.getSUID());
 					row.set(ColumnsCreator.EDGE_SOURCE_NODE_OUTPUT, currOutput);
-					System.out.println(row.get(ColumnsCreator.EDGE_SOURCE_NODE_OUTPUT, Double.class));
 				}
 			}
 			
