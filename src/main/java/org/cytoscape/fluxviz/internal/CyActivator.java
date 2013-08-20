@@ -21,11 +21,13 @@ import org.cytoscape.fluxviz.internal.logic.EdgeDefaultsSetter;
 import org.cytoscape.fluxviz.internal.logic.Evaluator;
 import org.cytoscape.fluxviz.internal.logic.NodeDefaultsSetter;
 import org.cytoscape.fluxviz.internal.logic.ViewHandler;
+import org.cytoscape.fluxviz.internal.tasks.EditNodeAttributesTaskFactory;
 import org.cytoscape.fluxviz.internal.tasks.SetTypeEdgeViewTask;
 import org.cytoscape.fluxviz.internal.tasks.SetTypeEdgeViewTaskFactory;
 import org.cytoscape.fluxviz.internal.tasks.SetTypeNodeViewTask;
 import org.cytoscape.fluxviz.internal.tasks.SetTypeNodeViewTaskFactory;
-import org.cytoscape.fluxviz.internal.tasks.FluxVizNetworkViewTaskFactory;
+import org.cytoscape.fluxviz.internal.tasks.StartFlowNetworkViewTaskFactory;
+import org.cytoscape.fluxviz.internal.tasks.StopFlowNetworkViewTaskFactory;
 import org.cytoscape.fluxviz.internal.tasks.UseFluxVizNetworkViewTaskFactory;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNetworkManager;
@@ -69,11 +71,12 @@ public class CyActivator extends AbstractCyActivator {
 		//CyServiceRegistrar cyServiceRegistrar = getService(bundleContext, CyServiceRegistrar.class);
 		CyNetworkViewManager cyNetworkViewManager = getService(bundleContext, CyNetworkViewManager.class);
 		VisualMappingFunctionFactory continousVisualMappingFunctionFactory = getService(bundleContext, VisualMappingFunctionFactory.class, "(mapping.type=continuous)");
+		VisualMappingFunctionFactory discreteVisualMappingFunctionFactory = getService(bundleContext, VisualMappingFunctionFactory.class, "(mapping.type=discrete)");
 		VisualStyleFactory visualStyleFactory = getService(bundleContext, VisualStyleFactory.class);
 		//CyApplicationManager cyApplicationManager = getService(bundleContext, CyApplicationManager.class);
 
 		Context appContext = new Context();
-		ViewHandler viewHandler = new ViewHandler(cyNetworkViewManager, visualMappingManager, visualStyleFactory, continousVisualMappingFunctionFactory);
+		ViewHandler viewHandler = new ViewHandler(cyNetworkViewManager, visualMappingManager, visualStyleFactory, continousVisualMappingFunctionFactory, discreteVisualMappingFunctionFactory);
 
 		//add app-specific columns to default tables
 //		Set<CyNetwork> allNets = new HashSet<CyNetwork>();
@@ -86,11 +89,11 @@ public class CyActivator extends AbstractCyActivator {
 //
 //		registerService(bundleContext, new ColumnsCreator(viewHandler), NetworkAddedListener.class, new Properties());
 
-//		//set defaults for attributes of newly added nodes
-//		registerService(bundleContext, new NodeDefaultsSetter(viewHandler.getNodeViewHandler()), AddedNodesListener.class, new Properties());
-//
-//		//set defaults for the attributes for newly added edges
-//		registerService(bundleContext, new EdgeDefaultsSetter(viewHandler.getEdgeViewHandler()), AddedEdgesListener.class, new Properties());
+		//set defaults for attributes of newly added nodes
+		registerService(bundleContext, new NodeDefaultsSetter(viewHandler.getNodeViewHandler(), appContext), AddedNodesListener.class, new Properties());
+
+		//set defaults for the attributes for newly added edges
+		registerService(bundleContext, new EdgeDefaultsSetter(viewHandler.getEdgeViewHandler(), appContext), AddedEdgesListener.class, new Properties());
 
 		//add Use FluxViz in network context menu
 		Properties switchProps = new Properties();
@@ -99,18 +102,16 @@ public class CyActivator extends AbstractCyActivator {
 		switchProps.setProperty(MENU_GRAVITY, "6.0f");
 		switchProps.setProperty(IN_MENU_BAR, "false");
 		switchProps.setProperty(TITLE, "Use FluxViz");
-
-		registerService(bundleContext, new UseFluxVizNetworkViewTaskFactory(appContext), 
+		registerService(bundleContext, new UseFluxVizNetworkViewTaskFactory(viewHandler, appContext), 
 				NetworkViewTaskFactory.class, switchProps);
 		
-		//add fluxviz menu to node context menu
+		//add Set Type menu to node context menu
 		Properties kinaseProps = new Properties();
 		kinaseProps.setProperty(PREFERRED_ACTION, "NEW");
 		kinaseProps.setProperty(PREFERRED_MENU, "Apps.FluxViz.Set Type");
 		kinaseProps.setProperty(MENU_GRAVITY, "6.0f");
 		kinaseProps.setProperty(IN_MENU_BAR, "false");
 		kinaseProps.setProperty(TITLE, SetTypeNodeViewTask.KINASE);
-
 		registerService(bundleContext, new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.KINASE, viewHandler, appContext), 
 				NodeViewTaskFactory.class, kinaseProps);
 
@@ -120,7 +121,6 @@ public class CyActivator extends AbstractCyActivator {
 		moleculesProps.setProperty(MENU_GRAVITY, "7.0f");
 		moleculesProps.setProperty(IN_MENU_BAR, "false");
 		moleculesProps.setProperty(TITLE, SetTypeNodeViewTask.MOLECULES);
-
 		registerService(bundleContext, new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.MOLECULES, viewHandler, appContext), 
 				NodeViewTaskFactory.class, moleculesProps);
 
@@ -130,7 +130,6 @@ public class CyActivator extends AbstractCyActivator {
 		gtpaseProps.setProperty(MENU_GRAVITY, "8.0f");
 		gtpaseProps.setProperty(IN_MENU_BAR, "false");
 		gtpaseProps.setProperty(TITLE, SetTypeNodeViewTask.GTPASE);
-
 		registerService(bundleContext, new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.GTPASE, viewHandler, appContext), 
 				NodeViewTaskFactory.class, gtpaseProps);
 
@@ -140,7 +139,6 @@ public class CyActivator extends AbstractCyActivator {
 		receptorProps.setProperty(MENU_GRAVITY, "9.0f");
 		receptorProps.setProperty(IN_MENU_BAR, "false");
 		receptorProps.setProperty(TITLE, SetTypeNodeViewTask.RECEPTOR);
-
 		registerService(bundleContext, new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.RECEPTOR, viewHandler, appContext), 
 				NodeViewTaskFactory.class, receptorProps);
 
@@ -150,7 +148,6 @@ public class CyActivator extends AbstractCyActivator {
 		receptorTKinaseProps.setProperty(MENU_GRAVITY, "10.0f");
 		receptorTKinaseProps.setProperty(IN_MENU_BAR, "false");
 		receptorTKinaseProps.setProperty(TITLE, SetTypeNodeViewTask.RECEPTOR_T_KINASE);
-
 		registerService(bundleContext, new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.RECEPTOR_T_KINASE, viewHandler, appContext), 
 				NodeViewTaskFactory.class, receptorTKinaseProps);
 
@@ -160,18 +157,26 @@ public class CyActivator extends AbstractCyActivator {
 		phosphataseProps.setProperty(MENU_GRAVITY, "10.0f");
 		phosphataseProps.setProperty(IN_MENU_BAR, "false");
 		phosphataseProps.setProperty(TITLE, SetTypeNodeViewTask.PHOSPHATASE);
-
 		registerService(bundleContext, new SetTypeNodeViewTaskFactory(SetTypeNodeViewTask.PHOSPHATASE, viewHandler, appContext), 
 				NodeViewTaskFactory.class, phosphataseProps);	
 
-		//add fluxviz menu to edge context menu
+		//add Edit FluxViz Attributes to node context menu
+		Properties editNodeAttrProps = new Properties();
+		editNodeAttrProps.setProperty(PREFERRED_ACTION, "NEW");
+		editNodeAttrProps.setProperty(PREFERRED_MENU, "Apps.FluxViz");
+		editNodeAttrProps.setProperty(MENU_GRAVITY, "10.0f");
+		editNodeAttrProps.setProperty(IN_MENU_BAR, "false");
+		editNodeAttrProps.setProperty(TITLE, "Edit FluxViz Node Attributes");
+		registerService(bundleContext, new EditNodeAttributesTaskFactory(appContext), 
+				NodeViewTaskFactory.class, editNodeAttrProps);
+		
+		//add Set Type menu to edge context menu
 		Properties activatingProps = new Properties();
 		activatingProps.setProperty(PREFERRED_ACTION, "NEW");
 		activatingProps.setProperty(PREFERRED_MENU, "Apps.FluxViz.Set Type");
 		activatingProps.setProperty(MENU_GRAVITY, "10.0f");
 		activatingProps.setProperty(IN_MENU_BAR, "false");
 		activatingProps.setProperty(TITLE, SetTypeEdgeViewTask.ACTIVATING);
-
 		registerService(bundleContext, new SetTypeEdgeViewTaskFactory(SetTypeEdgeViewTask.ACTIVATING, viewHandler.getEdgeViewHandler(), appContext), 
 				EdgeViewTaskFactory.class, activatingProps);
 
@@ -181,20 +186,37 @@ public class CyActivator extends AbstractCyActivator {
 		deactivatingProps.setProperty(MENU_GRAVITY, "10.0f");
 		deactivatingProps.setProperty(IN_MENU_BAR, "false");
 		deactivatingProps.setProperty(TITLE, SetTypeEdgeViewTask.DEACTIVATING);
-
 		registerService(bundleContext, new SetTypeEdgeViewTaskFactory(SetTypeEdgeViewTask.DEACTIVATING, viewHandler.getEdgeViewHandler(), appContext), 
 				EdgeViewTaskFactory.class, deactivatingProps);	
 
-		//add fluxviz menu to network context menu
+		//add Start menu to network context menu
 		Properties startProps = new Properties();
 		startProps.setProperty(PREFERRED_ACTION, "NEW");
 		startProps.setProperty(PREFERRED_MENU, "Apps.FluxViz");
 		startProps.setProperty(MENU_GRAVITY, "10.0f");
 		startProps.setProperty(IN_MENU_BAR, "false");
-		startProps.setProperty(TITLE, "Start4");
+		startProps.setProperty(TITLE, "Start");
+		registerService(bundleContext, new StartFlowNetworkViewTaskFactory(viewHandler, appContext, false), NetworkViewTaskFactory.class, startProps);
 
-		registerService(bundleContext, new FluxVizNetworkViewTaskFactory(viewHandler, startProps, appContext), NetworkViewTaskFactory.class, startProps);
+		//add Stop menu to network context menu
+		Properties stopProps = new Properties();
+		stopProps.setProperty(PREFERRED_ACTION, "NEW");
+		stopProps.setProperty(PREFERRED_MENU, "Apps.FluxViz");
+		stopProps.setProperty(MENU_GRAVITY, "10.0f");
+		stopProps.setProperty(IN_MENU_BAR, "false");
+		stopProps.setProperty(TITLE, "Stop");
+		registerService(bundleContext, new StopFlowNetworkViewTaskFactory(appContext), NetworkViewTaskFactory.class, stopProps);
 
+		//add Restart menu to network context menu
+		Properties restartProps = new Properties();
+		restartProps.setProperty(PREFERRED_ACTION, "NEW");
+		restartProps.setProperty(PREFERRED_MENU, "Apps.FluxViz");
+		restartProps.setProperty(MENU_GRAVITY, "10.0f");
+		restartProps.setProperty(IN_MENU_BAR, "false");
+		restartProps.setProperty(TITLE, "Restart");
+		registerService(bundleContext, new StartFlowNetworkViewTaskFactory(viewHandler, appContext, true), NetworkViewTaskFactory.class, restartProps);
+		
+		
 		//add the continuous visual mapping for node color mapped with currOutput
 		//ContinuousMapping<Double, Paint> tempMapping = (ContinuousMapping<Double, Paint>) continousVisualMappingFunctionFactory.createVisualMappingFunction(ColumnsCreator.CURR_OUTPUT, Double.class, BasicVisualLexicon.NODE_FILL_COLOR);
 
@@ -222,6 +244,5 @@ public class CyActivator extends AbstractCyActivator {
 //			}
 //		}
 		viewHandler.createVisualMappings();
-		viewHandler.createFluxVizStyle();		
 	}
 }

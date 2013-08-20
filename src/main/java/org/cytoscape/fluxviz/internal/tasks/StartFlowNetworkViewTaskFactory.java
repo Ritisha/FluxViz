@@ -13,13 +13,11 @@ import org.cytoscape.work.Tunable;
 import static org.cytoscape.work.ServiceProperties.TITLE;
 
 
-public class FluxVizNetworkViewTaskFactory extends AbstractNetworkViewTaskFactory {
+public class StartFlowNetworkViewTaskFactory extends AbstractNetworkViewTaskFactory {
 
 	ViewHandler viewHandler;
-	Evaluator evaluator;
-	Properties properties;
 	Context appContext;
-	String mode = "Start";
+	boolean doRestart = false;
 	
 	/**
 	 * Calls the StartFlowNetworkViewTask and the StopFlowNetworkViewTask. 
@@ -27,36 +25,35 @@ public class FluxVizNetworkViewTaskFactory extends AbstractNetworkViewTaskFactor
 	 * @param edgeViewHandler
 	 */
 	//TODO Needs cleanup
-	public FluxVizNetworkViewTaskFactory(ViewHandler viewHandler, Properties properties, Context appContext)
+	public StartFlowNetworkViewTaskFactory(ViewHandler viewHandler, Context appContext, boolean doRestart)
 	{
 		super();
 		this.viewHandler = viewHandler;
-		this.properties = properties;
 		this.appContext = appContext;
 	}
 	
 	public boolean isReady(CyNetworkView networkView)
 	{
-		return appContext.containsNetwork(networkView.getModel());
+		return (appContext.containsNetwork(networkView.getModel()) && (appContext.getEvaluator() == null));
 	}
 	
 	@Override
 	public TaskIterator createTaskIterator(CyNetworkView networkView) {
 		
-		TaskIterator taskIterator = null;
-		if(properties.get(TITLE).equals("Start4"))
-		{
-			evaluator = new Evaluator(viewHandler);
-			properties.setProperty(TITLE, "Stop");
+		//TaskIterator taskIterator = null;
+		//if(properties.get(TITLE).equals("Start"))
+		//{
+			appContext.setEvaluator(new Evaluator(viewHandler));
+			//properties.setProperty(TITLE, "Stop");
 			viewHandler.refresh(networkView);
-			taskIterator = new TaskIterator(new StartFlowNetworkViewTask(networkView, viewHandler, evaluator));
-		}
-		else if(properties.get(TITLE).equals("Stop"))
-		{
-			properties.setProperty(TITLE, "Start4");
-			viewHandler.refresh(networkView);
-			taskIterator = new TaskIterator(new StopFlowNetworkViewTask(networkView, evaluator));
-		}
-		return taskIterator;
+			return new TaskIterator(new StartFlowNetworkViewTask(networkView, viewHandler, appContext, doRestart));
+		//}
+//		else if(properties.get(TITLE).equals("Stop"))
+//		{
+//			properties.setProperty(TITLE, "Start");
+//			viewHandler.refresh(networkView);
+//			taskIterator = new TaskIterator(new StopFlowNetworkViewTask(networkView, evaluator));
+//		}
+//		return taskIterator;
 	}
 }

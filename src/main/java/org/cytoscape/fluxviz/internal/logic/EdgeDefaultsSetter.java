@@ -20,19 +20,23 @@ import org.cytoscape.model.events.AddedEdgesListener;
 public class EdgeDefaultsSetter implements AddedEdgesListener {
 
 	EdgeViewHandler edgeViewHandler;
+	Context appContext;
 	
-	public EdgeDefaultsSetter(EdgeViewHandler edgeViewHandler)
+	public EdgeDefaultsSetter(EdgeViewHandler edgeViewHandler, Context appContext)
 	{
-		super();
 		this.edgeViewHandler = edgeViewHandler;
+		this.appContext = appContext;
 	}
 	@Override
 	public void handleEvent(AddedEdgesEvent e) {
 
 		CyNetwork network = e.getSource();
-		Collection<CyEdge> edges = new ArrayList<CyEdge>();
-		edges = e.getPayloadCollection();
-		addDefaults(network, edges, edgeViewHandler);
+		if(appContext.containsNetwork(network))
+		{
+			Collection<CyEdge> edges = new ArrayList<CyEdge>();
+			edges = e.getPayloadCollection();
+			addDefaults(network, edges, edgeViewHandler);
+		}
 	}
 	
 	/**

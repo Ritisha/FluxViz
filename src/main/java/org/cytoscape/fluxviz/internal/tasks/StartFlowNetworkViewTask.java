@@ -1,5 +1,6 @@
 package org.cytoscape.fluxviz.internal.tasks;
 
+import org.cytoscape.fluxviz.internal.logic.Context;
 import org.cytoscape.fluxviz.internal.logic.Evaluator;
 import org.cytoscape.fluxviz.internal.logic.ViewHandler;
 import org.cytoscape.task.AbstractNetworkViewTask;
@@ -11,13 +12,9 @@ public class StartFlowNetworkViewTask extends AbstractNetworkViewTask {
 
 	CyNetworkView networkView;
 	ViewHandler viewHandler;
-	public Evaluator evaluator;
-	
-
-	//testing tunables
-	@Tunable(description="Test")
-	int test = 1; //default
-	
+	Context appContext;
+	Evaluator evaluator;
+	boolean doRestart;
 	
 	/**
 	 * Calls the evaluate method of the Evaluator 
@@ -25,20 +22,20 @@ public class StartFlowNetworkViewTask extends AbstractNetworkViewTask {
 	 * @param nodeViewHandler
 	 * @param edgeViewHandler
 	 */
-	public StartFlowNetworkViewTask(CyNetworkView networkView, ViewHandler viewHandler, Evaluator evaluator)
+	public StartFlowNetworkViewTask(CyNetworkView networkView, ViewHandler viewHandler, Context appContext, boolean doRestart)
 	{
 		super(networkView);
 		this.networkView = networkView;
 		this.viewHandler = viewHandler;
-		this.evaluator = evaluator;
+		this.appContext = appContext;
+		this.evaluator = appContext.getEvaluator();
+		this.doRestart = doRestart;
 		
 		//check and set visual mapping
 		viewHandler.createFluxVizStyle();
 	}
 	@Override
 	public void run(TaskMonitor tm) throws Exception {
-		
-		System.out.println("test is " + test);
-		evaluator.startEvaluator(networkView);
+		evaluator.startEvaluator(networkView, doRestart);
 	}
 }

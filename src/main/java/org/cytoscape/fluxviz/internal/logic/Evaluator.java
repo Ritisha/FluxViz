@@ -20,6 +20,7 @@ public class Evaluator extends Thread {
 	CyNetworkView networkView;
 	ViewHandler viewHandler;
 	boolean running;
+	boolean doRestart;
 	int sleepTime;
 	
 	public Evaluator(ViewHandler viewHandler)
@@ -29,11 +30,12 @@ public class Evaluator extends Thread {
 		sleepTime = 2;
 	}
 
-	public void startEvaluator(CyNetworkView networkView)
+	public void startEvaluator(CyNetworkView networkView, boolean doRestart)
 	{
 		this.running = true;
 		this.networkView = networkView;
 		this.network = networkView.getModel();
+		this.doRestart = doRestart;
 		this.start();
 	}
 	
@@ -46,20 +48,30 @@ public class Evaluator extends Thread {
 	{
 		List<CyNode> allNodes = new ArrayList<CyNode>();
 		allNodes = network.getNodeList();
+		CyRow row;
 
+		if(doRestart)
+		{
+			for(CyNode currNode : allNodes)
+			{
+				row = ColumnsCreator.DefaultNodeTable.getRow(currNode.getSUID());
+				Double initialOutput = row.get(ColumnsCreator.INITIAL_OUTPUT_VALUE, Double.class);
+				row.set(ColumnsCreator.CURR_OUTPUT, initialOutput);
+			}
+		}
+		
 		while(running)
 		{
-			System.out.println("now");
 			for(CyNode currNode : allNodes)
 			{
 				Double nextOutput = evaluate(currNode, network);
-				CyRow row = ColumnsCreator.HiddenNodeTable.getRow(currNode.getSUID());
+				row = ColumnsCreator.HiddenNodeTable.getRow(currNode.getSUID());
 				row.set(ColumnsCreator.NEXT_OUTPUT, nextOutput);
 			}
 			
 			for(CyNode currNode : allNodes)
 			{
-				CyRow row = ColumnsCreator.HiddenNodeTable.getRow(currNode.getSUID());
+				row = ColumnsCreator.HiddenNodeTable.getRow(currNode.getSUID());
 				Double currOutput = row.get(ColumnsCreator.NEXT_OUTPUT, Double.class);
 				row = ColumnsCreator.DefaultNodeTable.getRow(currNode.getSUID());
 				row.set(ColumnsCreator.CURR_OUTPUT, currOutput);

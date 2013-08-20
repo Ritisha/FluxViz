@@ -19,19 +19,23 @@ import org.cytoscape.model.events.AddedNodesListener;
 public class NodeDefaultsSetter implements AddedNodesListener {
 
 	NodeViewHandler nodeViewHandler;
+	Context appContext;
 	
-	public NodeDefaultsSetter(NodeViewHandler nodeViewHandler)
+	public NodeDefaultsSetter(NodeViewHandler nodeViewHandler, Context appContext)
 	{
-		// * super();
 		this.nodeViewHandler = nodeViewHandler;
+		this.appContext = appContext;
 	}
 	@Override
 	public void handleEvent(AddedNodesEvent e) {
 
 		CyNetwork network = e.getSource();
-		Collection<CyNode> nodes = new ArrayList<CyNode>();
-		nodes = e.getPayloadCollection();
-		addDefaults(network, nodes, nodeViewHandler);
+		if(appContext.containsNetwork(network))
+		{
+			Collection<CyNode> nodes = new ArrayList<CyNode>();
+			nodes = e.getPayloadCollection();
+			addDefaults(network, nodes, nodeViewHandler);
+		}	
 	}
 	
 	/**

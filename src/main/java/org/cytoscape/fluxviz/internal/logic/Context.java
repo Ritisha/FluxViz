@@ -7,8 +7,17 @@ import org.cytoscape.model.CyNetwork;
 
 public class Context {
 	
-	public List<CyNetwork> activeNetworks;
+	private List<CyNetwork> activeNetworks;
+	private Evaluator evaluator = null;
 	
+	public Evaluator getEvaluator() {
+		return evaluator;
+	}
+
+	public void setEvaluator(Evaluator evaluator) {
+		this.evaluator = evaluator;
+	}
+
 	public Context()
 	{
 		activeNetworks = new ArrayList<CyNetwork>();
