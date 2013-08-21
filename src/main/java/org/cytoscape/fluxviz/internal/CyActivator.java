@@ -21,6 +21,7 @@ import org.cytoscape.fluxviz.internal.logic.EdgeDefaultsSetter;
 import org.cytoscape.fluxviz.internal.logic.Evaluator;
 import org.cytoscape.fluxviz.internal.logic.NodeDefaultsSetter;
 import org.cytoscape.fluxviz.internal.logic.ViewHandler;
+import org.cytoscape.fluxviz.internal.tasks.ControlsMenuNetworkViewTaskFactory;
 import org.cytoscape.fluxviz.internal.tasks.EditNodeAttributesTaskFactory;
 import org.cytoscape.fluxviz.internal.tasks.SetTypeEdgeViewTask;
 import org.cytoscape.fluxviz.internal.tasks.SetTypeEdgeViewTaskFactory;
@@ -216,6 +217,14 @@ public class CyActivator extends AbstractCyActivator {
 		restartProps.setProperty(TITLE, "Restart");
 		registerService(bundleContext, new StartFlowNetworkViewTaskFactory(viewHandler, appContext, true), NetworkViewTaskFactory.class, restartProps);
 		
+		//add Control menu to network context menu
+		Properties controlProps = new Properties();
+		controlProps.setProperty(PREFERRED_ACTION, "NEW");
+		controlProps.setProperty(PREFERRED_MENU, "Apps.FluxViz");
+		controlProps.setProperty(MENU_GRAVITY, "10.0f");
+		controlProps.setProperty(IN_MENU_BAR, "false");
+		controlProps.setProperty(TITLE, "Controls");
+		registerService(bundleContext, new ControlsMenuNetworkViewTaskFactory(appContext), NetworkViewTaskFactory.class, controlProps);
 		
 		//add the continuous visual mapping for node color mapped with currOutput
 		//ContinuousMapping<Double, Paint> tempMapping = (ContinuousMapping<Double, Paint>) continousVisualMappingFunctionFactory.createVisualMappingFunction(ColumnsCreator.CURR_OUTPUT, Double.class, BasicVisualLexicon.NODE_FILL_COLOR);

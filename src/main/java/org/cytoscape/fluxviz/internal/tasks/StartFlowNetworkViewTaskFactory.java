@@ -43,7 +43,7 @@ public class StartFlowNetworkViewTaskFactory extends AbstractNetworkViewTaskFact
 		//TaskIterator taskIterator = null;
 		//if(properties.get(TITLE).equals("Start"))
 		//{
-			appContext.setEvaluator(new Evaluator(viewHandler));
+			appContext.setEvaluator(new Evaluator(viewHandler, appContext));
 			//properties.setProperty(TITLE, "Stop");
 			viewHandler.refresh(networkView);
 			return new TaskIterator(new StartFlowNetworkViewTask(networkView, viewHandler, appContext, doRestart));

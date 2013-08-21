@@ -9,7 +9,16 @@ public class Context {
 	
 	private List<CyNetwork> activeNetworks;
 	private Evaluator evaluator = null;
+	int sleepTime;
 	
+	public int getSleepTime() {
+		return sleepTime;
+	}
+
+	public void setSleepTime(int sleepTime) {
+		this.sleepTime = sleepTime;
+	}
+
 	public Evaluator getEvaluator() {
 		return evaluator;
 	}
