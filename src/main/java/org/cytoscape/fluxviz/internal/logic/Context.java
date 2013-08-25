@@ -30,6 +30,7 @@ public class Context {
 	public Context()
 	{
 		activeNetworks = new ArrayList<CyNetwork>();
+		sleepTime = 1;
 	}
 
 	public boolean containsNetwork(CyNetwork network)
