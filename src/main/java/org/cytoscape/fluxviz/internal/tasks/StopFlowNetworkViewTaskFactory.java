@@ -24,5 +24,4 @@ public class StopFlowNetworkViewTaskFactory extends AbstractNetworkViewTaskFacto
 	public TaskIterator createTaskIterator(CyNetworkView networkView) {
 		return new TaskIterator(new StopFlowNetworkViewTask(networkView, appContext));
 	}
-
 }

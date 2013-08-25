@@ -6,11 +6,6 @@ import static org.cytoscape.work.ServiceProperties.PREFERRED_ACTION;
 import static org.cytoscape.work.ServiceProperties.PREFERRED_MENU;
 import static org.cytoscape.work.ServiceProperties.TITLE;
 
-import java.awt.Color;
-import java.awt.Paint;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -68,7 +63,7 @@ public class CyActivator extends AbstractCyActivator {
 	public void start(BundleContext bundleContext) throws Exception {
 
 		VisualMappingManager visualMappingManager = getService(bundleContext, VisualMappingManager.class);
-		CyNetworkManager cyNetworkManager = getService(bundleContext, CyNetworkManager.class);
+		//CyNetworkManager cyNetworkManager = getService(bundleContext, CyNetworkManager.class);
 		//CyServiceRegistrar cyServiceRegistrar = getService(bundleContext, CyServiceRegistrar.class);
 		CyNetworkViewManager cyNetworkViewManager = getService(bundleContext, CyNetworkViewManager.class);
 		VisualMappingFunctionFactory continousVisualMappingFunctionFactory = getService(bundleContext, VisualMappingFunctionFactory.class, "(mapping.type=continuous)");
@@ -78,17 +73,6 @@ public class CyActivator extends AbstractCyActivator {
 
 		Context appContext = new Context();
 		ViewHandler viewHandler = new ViewHandler(cyNetworkViewManager, visualMappingManager, visualStyleFactory, continousVisualMappingFunctionFactory, discreteVisualMappingFunctionFactory);
-
-		//add app-specific columns to default tables
-//		Set<CyNetwork> allNets = new HashSet<CyNetwork>();
-//		allNets = cyNetworkManager.getNetworkSet();
-//
-//		for(CyNetwork currNet : allNets)
-//		{
-//			ColumnsCreator.createColumns(currNet, viewHandler);		
-//		}
-//
-//		registerService(bundleContext, new ColumnsCreator(viewHandler), NetworkAddedListener.class, new Properties());
 
 		//set defaults for attributes of newly added nodes
 		registerService(bundleContext, new NodeDefaultsSetter(viewHandler.getNodeViewHandler(), appContext), AddedNodesListener.class, new Properties());
@@ -226,32 +210,6 @@ public class CyActivator extends AbstractCyActivator {
 		controlProps.setProperty(TITLE, "Controls");
 		registerService(bundleContext, new ControlsMenuNetworkViewTaskFactory(appContext), NetworkViewTaskFactory.class, controlProps);
 		
-		//add the continuous visual mapping for node color mapped with currOutput
-		//ContinuousMapping<Double, Paint> tempMapping = (ContinuousMapping<Double, Paint>) continousVisualMappingFunctionFactory.createVisualMappingFunction(ColumnsCreator.CURR_OUTPUT, Double.class, BasicVisualLexicon.NODE_FILL_COLOR);
-
-//		Double val1 = 0d;
-//		Double val2 = 1d;
-//		Double val3 = 5d;
-//		BoundaryRangeValues<Paint> brv1 = new BoundaryRangeValues<Paint>(Color.GRAY, Color.GRAY, Color.DARK_GRAY);
-//		BoundaryRangeValues<Paint> brv2 = new BoundaryRangeValues<Paint>(Color.GREEN, Color.GREEN, Color.GREEN);
-//		BoundaryRangeValues<Paint> brv3 = new BoundaryRangeValues<Paint>(Color.RED, Color.RED, Color.RED);
-//
-//		tempMapping.addPoint(val1, brv1);
-//		tempMapping.addPoint(val2, brv2);
-//		tempMapping.addPoint(val3, brv3);
-//		
-//		CyNetwork tempNet = cyApplicationManager.getCurrentNetwork();
-//		List<CyNode> allNodes = new ArrayList<CyNode>();
-//		allNodes = tempNet.getNodeList();
-//		boolean temp = true;
-//		for(CyNode currNode : allNodes)
-//		{
-//			temp = !temp;
-//			if(temp)
-//			{
-//				tempMapping.apply(ColumnsCreator.DefaultNodeTable.getRow(currNode.getSUID()), cyApplicationManager.getCurrentNetworkView().getNodeView(currNode));
-//			}
-//		}
 		viewHandler.createVisualMappings();
 	}
 }

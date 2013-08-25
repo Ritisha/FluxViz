@@ -24,5 +24,4 @@ public class StopFlowNetworkViewTask extends AbstractNetworkViewTask {
 		appContext.getEvaluator().stopEvaluator();
 		appContext.setEvaluator(null);
 	}
-
 }

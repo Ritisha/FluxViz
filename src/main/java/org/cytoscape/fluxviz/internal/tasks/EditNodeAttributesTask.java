@@ -63,5 +63,4 @@ public class EditNodeAttributesTask extends AbstractNodeViewTask {
 		row.set(ColumnsCreator.INTEGER_OUTPUT_NODE_THRESH, intOutputNodeThresh);
 		row.set(ColumnsCreator.UPPER_BOUND, upperBound);
 	}
-
 }

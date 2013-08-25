@@ -34,6 +34,7 @@ public class ColumnsCreator implements NetworkAddedListener {
 	public static String PORT_EFFICIENCY = "Port Efficiency";
 	public static String INTEGER_OUTPUT_NODE_THRESH = "Integer Output Node Threshold";
 	public static String UPPER_BOUND = "Upper Bound";
+	public static String EDGE_SUM = "Edge Sum";
 	public static String CURR_OUTPUT = "Current Output";
 	public static String NEXT_OUTPUT = "Next Output";
 	
@@ -61,7 +62,7 @@ public class ColumnsCreator implements NetworkAddedListener {
 	/**
 	 * @param network the columns are created in the tables of this network
 	 * @param nodeViewHandler the object whose method will be called to set default view for nodes
-	 * @param edgeViewHandler the object whose method will be called to set default voew for edges
+	 * @param edgeViewHandler the object whose method will be called to set default view for edges
 	 */
 	public static void createColumns(CyNetwork network, ViewHandler viewHandler)
 	{
@@ -102,6 +103,9 @@ public class ColumnsCreator implements NetworkAddedListener {
 		
 		if(DefaultNodeTable.getColumn(CURR_OUTPUT) == null)
 			DefaultNodeTable.createColumn(CURR_OUTPUT, Double.class, true, 0.5);
+		
+		if(DefaultNodeTable.getColumn(EDGE_SUM) == null)
+			DefaultNodeTable.createColumn(EDGE_SUM, Double.class, true, 0.0);
 		
 		if(HiddenNodeTable.getColumn(NEXT_OUTPUT) == null)
 			HiddenNodeTable.createColumn(NEXT_OUTPUT, Double.class, true, 0.0);

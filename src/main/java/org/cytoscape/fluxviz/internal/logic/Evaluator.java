@@ -3,6 +3,7 @@ package org.cytoscape.fluxviz.internal.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cytoscape.fluxviz.internal.tasks.SetTypeEdgeViewTask;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
@@ -90,6 +91,7 @@ public class Evaluator extends Thread {
 			viewHandler.refresh(networkView);
 			
 			try {
+				System.out.println(appContext.getSleepTime());
 				Thread.sleep(appContext.getSleepTime()*1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -141,11 +143,11 @@ public class Evaluator extends Thread {
 			edgeSourceNodePortEfficiencyList = row.getList(ColumnsCreator.PORT_EFFICIENCY, Double.class);
 			edgeSourcePort1Efficiency = edgeSourceNodePortEfficiencyList.get(0);
 			
-			if(edgeType.equals("Activating"))
+			if(edgeType.equals(SetTypeEdgeViewTask.ACTIVATING))
 			{
 				v += edgeSourceOutput.doubleValue() * edgeEfficiency.doubleValue() * edgeSourcePort1Efficiency.doubleValue();
 			}
-			else if(edgeType.equals("Deactivating"))
+			else if(edgeType.equals(SetTypeEdgeViewTask.DEACTIVATING))
 			{
 				v -= edgeSourceOutput.doubleValue() * edgeEfficiency.doubleValue() * edgeSourcePort1Efficiency.doubleValue();
 			}
@@ -156,6 +158,7 @@ public class Evaluator extends Thread {
 		timeRamp = row.get(ColumnsCreator.TIME_RAMP, Double.class);
 		relativeConc = row.get(ColumnsCreator.RELATIVE_CONCENTRATION, Double.class);
 		decay = row.get(ColumnsCreator.DECAY, Double.class);
+		row.set(ColumnsCreator.EDGE_SUM, v);
 		
 		newV = currentOutput.doubleValue() + (v.doubleValue() * (timeRamp.doubleValue() + relativeConc.doubleValue())/2) - decay.doubleValue();
 		if(newV < 0)

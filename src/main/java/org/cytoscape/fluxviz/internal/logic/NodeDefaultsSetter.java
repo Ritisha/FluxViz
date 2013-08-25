@@ -81,6 +81,9 @@ public class NodeDefaultsSetter implements AddedNodesListener {
 			if(!row.isSet(ColumnsCreator.UPPER_BOUND))
 				row.set(ColumnsCreator.UPPER_BOUND, 1.0);
 			
+			if(!row.isSet(ColumnsCreator.EDGE_SUM))
+				row.set(ColumnsCreator.EDGE_SUM, 0.0);
+			
 			if(!row.isSet(ColumnsCreator.CURR_OUTPUT))
 				row.set(ColumnsCreator.CURR_OUTPUT, 0.5);
 			
@@ -94,5 +97,4 @@ public class NodeDefaultsSetter implements AddedNodesListener {
 			nodeViewHandler.setNodeView(currNode, network, type);
 		}
 	}
-
 }

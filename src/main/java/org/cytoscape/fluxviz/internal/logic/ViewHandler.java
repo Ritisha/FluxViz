@@ -12,6 +12,8 @@ import org.cytoscape.model.CyRow;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.CyNetworkViewManager;
 import org.cytoscape.view.presentation.property.BasicVisualLexicon;
+import org.cytoscape.view.presentation.property.LineTypeVisualProperty;
+import org.cytoscape.view.presentation.property.values.LineType;
 import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyle;
@@ -32,7 +34,8 @@ public class ViewHandler {
 	ContinuousMapping<Double, Paint> currOutputNodeSelectedColorMapping;
 	ContinuousMapping<Double, Paint> activatingEdgeMapping;
 	ContinuousMapping<Double, Paint> deactivatingEdgeMapping;
-	DiscreteMapping<Boolean, Paint> selectedNodeBorderColorMapping;
+	ContinuousMapping<Double, Paint> edgeSumNodeBorderColorMapping;
+	DiscreteMapping<Boolean, LineType> selectedNodeBorderLineTypeMapping;
 	
 	public ViewHandler(CyNetworkViewManager cyNetworkViewManager, VisualMappingManager visualMappingManager, VisualStyleFactory visualStyleFactory, VisualMappingFunctionFactory continousVisualMappingFunctionFactory, VisualMappingFunctionFactory discreteVisualMappingFunctionFactory)
 	{
@@ -49,6 +52,7 @@ public class ViewHandler {
 		Double val1 = 0d;
 		Double val2 = 1d;
 		Double val3 = 5d;
+		Double val4 = -5d;
 		
 		Color lightGray = new Color(240, 240, 240);
 		BoundaryRangeValues<Paint> brv1 = new BoundaryRangeValues<Paint>(lightGray, lightGray, lightGray);
@@ -68,6 +72,11 @@ public class ViewHandler {
 		currOutputNodeSelectedColorMapping.addPoint(val2, brv2);
 		currOutputNodeSelectedColorMapping.addPoint(val3, brv3);
 		
+		edgeSumNodeBorderColorMapping = (ContinuousMapping<Double, Paint>) continousVisualMappingFunctionFactory.createVisualMappingFunction(ColumnsCreator.EDGE_SUM, Double.class, BasicVisualLexicon.NODE_BORDER_PAINT);
+		edgeSumNodeBorderColorMapping.addPoint(val1, brv1);
+		edgeSumNodeBorderColorMapping.addPoint(val3, brv2);
+		edgeSumNodeBorderColorMapping.addPoint(val4, brv3);
+		
 		activatingEdgeMapping = (ContinuousMapping<Double, Paint>) continousVisualMappingFunctionFactory.createVisualMappingFunction(ColumnsCreator.EDGE_SOURCE_NODE_OUTPUT, Double.class, BasicVisualLexicon.EDGE_STROKE_UNSELECTED_PAINT);
 		activatingEdgeMapping.addPoint(val1, brv1);
 		activatingEdgeMapping.addPoint(val2, brv2);
@@ -78,8 +87,9 @@ public class ViewHandler {
 		deactivatingEdgeMapping.addPoint(val2, brv1);
 		deactivatingEdgeMapping.addPoint(val3, brv6);
 		
-		selectedNodeBorderColorMapping = (DiscreteMapping<Boolean, Paint>) discreteVisualMappingFunctionFactory.createVisualMappingFunction(CyNetwork.SELECTED, Boolean.class, BasicVisualLexicon.NODE_BORDER_PAINT);
-		selectedNodeBorderColorMapping.putMapValue(true, Color.YELLOW);
+		selectedNodeBorderLineTypeMapping = (DiscreteMapping<Boolean, LineType>) discreteVisualMappingFunctionFactory.createVisualMappingFunction(CyNetwork.SELECTED, Boolean.class, BasicVisualLexicon.NODE_BORDER_LINE_TYPE);
+		selectedNodeBorderLineTypeMapping.putMapValue(true, LineTypeVisualProperty.SOLID);
+		selectedNodeBorderLineTypeMapping.putMapValue(false, LineTypeVisualProperty.DASH_DOT);
 	}
 	
 	public void createFluxVizStyle()
@@ -93,7 +103,8 @@ public class ViewHandler {
 		newVisualStyle.setTitle(newName);
 		newVisualStyle.addVisualMappingFunction(currOutputNodeFillColorMapping);
 		newVisualStyle.addVisualMappingFunction(currOutputNodeSelectedColorMapping);
-		newVisualStyle.addVisualMappingFunction(selectedNodeBorderColorMapping);
+		newVisualStyle.addVisualMappingFunction(selectedNodeBorderLineTypeMapping);
+		newVisualStyle.addVisualMappingFunction(edgeSumNodeBorderColorMapping);
 		visualMappingManager.addVisualStyle(newVisualStyle);
 		visualMappingManager.setCurrentVisualStyle(newVisualStyle);
 	}
@@ -125,16 +136,7 @@ public class ViewHandler {
 		return nodeViewHandler;
 	}
 
-	public void setNodeViewHandler(NodeViewHandler nodeViewHandler) {
-		this.nodeViewHandler = nodeViewHandler;
-	}
-
 	public EdgeViewHandler getEdgeViewHandler() {
 		return edgeViewHandler;
 	}
-
-	public void setEdgeViewHandler(EdgeViewHandler edgeViewHandler) {
-		this.edgeViewHandler = edgeViewHandler;
-	}
-
 }
