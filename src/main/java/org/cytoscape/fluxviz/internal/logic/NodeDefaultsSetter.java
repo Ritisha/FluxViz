@@ -70,7 +70,7 @@ public class NodeDefaultsSetter implements AddedNodesListener {
 				row.set(ColumnsCreator.DECAY, 0.0001);
 			
 			if(!row.isSet(ColumnsCreator.INITIAL_OUTPUT_VALUE))
-				row.set(ColumnsCreator.INITIAL_OUTPUT_VALUE, 0.0);
+				row.set(ColumnsCreator.INITIAL_OUTPUT_VALUE, 0.5);
 			
 			if(!row.isSet(ColumnsCreator.PORT_EFFICIENCY))
 				row.set(ColumnsCreator.PORT_EFFICIENCY, portEfficiency);

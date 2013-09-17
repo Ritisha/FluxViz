@@ -49,47 +49,69 @@ public class ViewHandler {
 
 	public void createVisualMappings()
 	{
-		Double val1 = 0d;
-		Double val2 = 1d;
-		Double val3 = 5d;
-		Double val4 = -5d;
+		Double val1 = 1.0001d;
+		Double val2 = 1.0d;
+		Double val3 = 0.0d;
+		Double val4 = -0.000001d;
+		Double val5 = 0.000001d;
+		Double val6 = 1.01d;
+		Double val7 = 10.0d;
+		Double val8 = -1.0d;
 		
-		Color lightGray = new Color(240, 240, 240);
-		BoundaryRangeValues<Paint> brv1 = new BoundaryRangeValues<Paint>(lightGray, lightGray, lightGray);
-		BoundaryRangeValues<Paint> brv2 = new BoundaryRangeValues<Paint>(Color.GREEN, Color.GREEN, Color.GREEN);
-		BoundaryRangeValues<Paint> brv3 = new BoundaryRangeValues<Paint>(Color.RED, Color.RED, Color.RED);
-		BoundaryRangeValues<Paint> brv4 = new BoundaryRangeValues<Paint>(Color.BLUE, Color.BLUE, Color.BLUE);
-		BoundaryRangeValues<Paint> brv5 = new BoundaryRangeValues<Paint>(Color.RED, Color.RED, Color.RED);
-		BoundaryRangeValues<Paint> brv6 = new BoundaryRangeValues<Paint>(Color.BLACK, Color.BLACK, Color.BLACK);
+		Color color1 = new Color(215, 25, 32);
+		Color color2 = new Color(250, 184, 22);
+		Color color3 = new Color(220, 220, 220);
+		Color color4 = new Color(115, 180, 226);
+		Color color5 = new Color(46, 49, 146);
+		Color color6 = new Color(236, 132, 35);
+		Color color7 = new Color(0, 102, 179);
+		Color color8 = new Color(248, 248, 248);
+		Color color9 = new Color(199, 223, 244);
+		Color color10 = new Color(115, 180, 226);
+		
+		BoundaryRangeValues<Paint> brv1 = new BoundaryRangeValues<Paint>(color1, color1, color1);
+		BoundaryRangeValues<Paint> brv2 = new BoundaryRangeValues<Paint>(color2, color2, color2);
+		BoundaryRangeValues<Paint> brv3 = new BoundaryRangeValues<Paint>(color3, color3, color3);
+		BoundaryRangeValues<Paint> brv4 = new BoundaryRangeValues<Paint>(color4, color4, color4);
+		BoundaryRangeValues<Paint> brv5 = new BoundaryRangeValues<Paint>(color5, color5, color5);
+		BoundaryRangeValues<Paint> brv6 = new BoundaryRangeValues<Paint>(color6, color6, color6);
+		BoundaryRangeValues<Paint> brv7 = new BoundaryRangeValues<Paint>(color7, color7, color7);
+		BoundaryRangeValues<Paint> brv8 = new BoundaryRangeValues<Paint>(color8, color8, color8);
+		BoundaryRangeValues<Paint> brv9 = new BoundaryRangeValues<Paint>(color9, color9, color9);
+		BoundaryRangeValues<Paint> brv10 = new BoundaryRangeValues<Paint>(color10, color10, color10);
 
 		currOutputNodeFillColorMapping = (ContinuousMapping<Double, Paint>) continousVisualMappingFunctionFactory.createVisualMappingFunction(ColumnsCreator.CURR_OUTPUT, Double.class, BasicVisualLexicon.NODE_FILL_COLOR);
-		currOutputNodeFillColorMapping.addPoint(val1, brv1);
-		currOutputNodeFillColorMapping.addPoint(val2, brv2);
-		currOutputNodeFillColorMapping.addPoint(val3, brv3);
-		
+		currOutputNodeFillColorMapping.addPoint(val3, brv8);
+		currOutputNodeFillColorMapping.addPoint(val2, brv9);
+		currOutputNodeFillColorMapping.addPoint(val6, brv10);
+		currOutputNodeFillColorMapping.addPoint(val7, brv10);
+
 		currOutputNodeSelectedColorMapping = (ContinuousMapping<Double, Paint>) continousVisualMappingFunctionFactory.createVisualMappingFunction(ColumnsCreator.CURR_OUTPUT, Double.class, BasicVisualLexicon.NODE_SELECTED_PAINT);
-		currOutputNodeSelectedColorMapping.addPoint(val1, brv1);
-		currOutputNodeSelectedColorMapping.addPoint(val2, brv2);
-		currOutputNodeSelectedColorMapping.addPoint(val3, brv3);
-		
+		currOutputNodeSelectedColorMapping.addPoint(val3, brv8);
+		currOutputNodeSelectedColorMapping.addPoint(val2, brv9);
+		currOutputNodeSelectedColorMapping.addPoint(val6, brv10);
+		currOutputNodeSelectedColorMapping.addPoint(val7, brv10);
+
 		edgeSumNodeBorderColorMapping = (ContinuousMapping<Double, Paint>) continousVisualMappingFunctionFactory.createVisualMappingFunction(ColumnsCreator.EDGE_SUM, Double.class, BasicVisualLexicon.NODE_BORDER_PAINT);
-		edgeSumNodeBorderColorMapping.addPoint(val1, brv1);
-		edgeSumNodeBorderColorMapping.addPoint(val3, brv2);
-		edgeSumNodeBorderColorMapping.addPoint(val4, brv3);
+		edgeSumNodeBorderColorMapping.addPoint(val4, brv6);
+		edgeSumNodeBorderColorMapping.addPoint(val3, brv3);
+		edgeSumNodeBorderColorMapping.addPoint(val5, brv7);
+		edgeSumNodeBorderColorMapping.addPoint(val2, brv7);
+		edgeSumNodeBorderColorMapping.addPoint(val8, brv6);
+
+		activatingEdgeMapping = (ContinuousMapping<Double, Paint>) continousVisualMappingFunctionFactory.createVisualMappingFunction(ColumnsCreator.EDGE_SOURCE_NODE_OUTPUT, Double.class, BasicVisualLexicon.EDGE_UNSELECTED_PAINT);
+		activatingEdgeMapping.addPoint(val1, brv5);
+		activatingEdgeMapping.addPoint(val2, brv4);
+		activatingEdgeMapping.addPoint(val3, brv3);
 		
-		activatingEdgeMapping = (ContinuousMapping<Double, Paint>) continousVisualMappingFunctionFactory.createVisualMappingFunction(ColumnsCreator.EDGE_SOURCE_NODE_OUTPUT, Double.class, BasicVisualLexicon.EDGE_STROKE_UNSELECTED_PAINT);
-		activatingEdgeMapping.addPoint(val1, brv1);
-		activatingEdgeMapping.addPoint(val2, brv2);
-		activatingEdgeMapping.addPoint(val3, brv4);
-		
-		deactivatingEdgeMapping = (ContinuousMapping<Double, Paint>) continousVisualMappingFunctionFactory.createVisualMappingFunction(ColumnsCreator.EDGE_SOURCE_NODE_OUTPUT, Double.class, BasicVisualLexicon.EDGE_STROKE_UNSELECTED_PAINT);
-		deactivatingEdgeMapping.addPoint(val1, brv5);
-		deactivatingEdgeMapping.addPoint(val2, brv1);
-		deactivatingEdgeMapping.addPoint(val3, brv6);
+		deactivatingEdgeMapping = (ContinuousMapping<Double, Paint>) continousVisualMappingFunctionFactory.createVisualMappingFunction(ColumnsCreator.EDGE_SOURCE_NODE_OUTPUT, Double.class, BasicVisualLexicon.EDGE_UNSELECTED_PAINT);
+		deactivatingEdgeMapping.addPoint(val1, brv1);
+		deactivatingEdgeMapping.addPoint(val2, brv2);
+		deactivatingEdgeMapping.addPoint(val3, brv3);
 		
 		selectedNodeBorderLineTypeMapping = (DiscreteMapping<Boolean, LineType>) discreteVisualMappingFunctionFactory.createVisualMappingFunction(CyNetwork.SELECTED, Boolean.class, BasicVisualLexicon.NODE_BORDER_LINE_TYPE);
-		selectedNodeBorderLineTypeMapping.putMapValue(true, LineTypeVisualProperty.SOLID);
-		selectedNodeBorderLineTypeMapping.putMapValue(false, LineTypeVisualProperty.DASH_DOT);
+		selectedNodeBorderLineTypeMapping.putMapValue(true, LineTypeVisualProperty.DOT);
+		selectedNodeBorderLineTypeMapping.putMapValue(false, LineTypeVisualProperty.SOLID);
 	}
 	
 	public void createFluxVizStyle()
@@ -123,11 +145,11 @@ public class ViewHandler {
 			String currEdgeType = row.get(ColumnsCreator.EDGE_TYPE, String.class);
 			if(currEdgeType.equals(SetTypeEdgeViewTask.ACTIVATING))
 			{
-				activatingEdgeMapping.apply(row, networkView.getEdgeView(currEdge));
+				networkView.getEdgeView(currEdge).setLockedValue(BasicVisualLexicon.EDGE_UNSELECTED_PAINT, activatingEdgeMapping.getMappedValue(row));
 			}
 			else if(currEdgeType.equals(SetTypeEdgeViewTask.DEACTIVATING))
 			{
-				deactivatingEdgeMapping.apply(row, networkView.getEdgeView(currEdge));
+				networkView.getEdgeView(currEdge).setLockedValue(BasicVisualLexicon.EDGE_UNSELECTED_PAINT, deactivatingEdgeMapping.getMappedValue(row));
 			}
 		}
 	}

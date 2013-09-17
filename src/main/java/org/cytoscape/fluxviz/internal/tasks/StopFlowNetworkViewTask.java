@@ -1,7 +1,6 @@
 package org.cytoscape.fluxviz.internal.tasks;
 
 import org.cytoscape.fluxviz.internal.logic.Context;
-import org.cytoscape.fluxviz.internal.logic.Evaluator;
 import org.cytoscape.task.AbstractNetworkViewTask;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.work.TaskMonitor;

@@ -6,7 +6,6 @@ import org.cytoscape.fluxviz.internal.logic.ViewHandler;
 import org.cytoscape.task.AbstractNetworkViewTask;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.work.TaskMonitor;
-import org.cytoscape.work.Tunable;
 
 public class StartFlowNetworkViewTask extends AbstractNetworkViewTask {
 

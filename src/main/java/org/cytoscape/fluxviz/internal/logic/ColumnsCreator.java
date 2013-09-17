@@ -9,6 +9,7 @@ import org.cytoscape.fluxviz.internal.tasks.SetTypeNodeViewTask;
 import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
+import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTable;
 import org.cytoscape.model.events.NetworkAddedEvent;
 import org.cytoscape.model.events.NetworkAddedListener;
@@ -24,6 +25,7 @@ public class ColumnsCreator implements NetworkAddedListener {
 	public static CyTable DefaultNodeTable;
 	public static CyTable DefaultEdgeTable;
 	public static CyTable HiddenNodeTable;
+	public static CyTable DefaultNetworkTable;
 	
 	public static String NODE_TYPE = "Node Type";
 	public static String NUM_OF_INPUTS = "Number of Inputs";
@@ -43,12 +45,13 @@ public class ColumnsCreator implements NetworkAddedListener {
 	public static String EDGE_EFFICIENCY = "Edge Efficiency";
 	public static String EDGE_SOURCE_NODE_OUTPUT = "Source Node Output";
 	
+	public static String IS_FV_ENABLED = "Is FluxViz Enabled";
+	
 	CyNetwork network;
 	ViewHandler viewHandler;
 
 	public ColumnsCreator(ViewHandler viewHandler)
 	{
-		super();
 		this.viewHandler = viewHandler;
 	}
 	
@@ -69,6 +72,7 @@ public class ColumnsCreator implements NetworkAddedListener {
 		//get tables
 		DefaultNodeTable = network.getDefaultNodeTable();
 		DefaultEdgeTable = network.getDefaultEdgeTable();
+		DefaultNetworkTable = network.getDefaultNetworkTable();
 		HiddenNodeTable = network.getTable(CyNode.class, CyNetwork.HIDDEN_ATTRS);
 		List<CyNode> allNodes = new ArrayList<CyNode>();
 		List<CyEdge> allEdges = new ArrayList<CyEdge>();
@@ -121,6 +125,13 @@ public class ColumnsCreator implements NetworkAddedListener {
 		
 		if(DefaultEdgeTable.getColumn(EDGE_SOURCE_NODE_OUTPUT) == null)
 			DefaultEdgeTable.createColumn(EDGE_SOURCE_NODE_OUTPUT, Double.class, true, 0.5);
+		
+		if(DefaultNetworkTable.getColumn(IS_FV_ENABLED) == null)
+			DefaultNetworkTable.createColumn(IS_FV_ENABLED, Boolean.class, true);
+		
+		CyRow row = DefaultNetworkTable.getRow(network.getSUID());
+		if(!row.isSet(ColumnsCreator.IS_FV_ENABLED))
+			row.set(ColumnsCreator.IS_FV_ENABLED, true);
 		
 		allNodes = network.getNodeList();
 		allEdges = network.getEdgeList();

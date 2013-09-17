@@ -29,7 +29,6 @@ public class Evaluator extends Thread {
 		super();
 		this.viewHandler = viewHandler;
 		this.appContext = appContext;
-		appContext.setSleepTime(1);
 	}
 
 	public void startEvaluator(CyNetworkView networkView, boolean doRestart)
@@ -91,8 +90,7 @@ public class Evaluator extends Thread {
 			viewHandler.refresh(networkView);
 			
 			try {
-				System.out.println(appContext.getSleepTime());
-				Thread.sleep(appContext.getSleepTime()*1000);
+				Thread.sleep((long)(1/appContext.getSpeed())*1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

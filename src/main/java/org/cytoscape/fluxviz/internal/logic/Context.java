@@ -9,14 +9,15 @@ public class Context {
 	
 	private List<CyNetwork> activeNetworks;
 	private Evaluator evaluator = null;
-	int sleepTime;
+	double speed;
 	
-	public int getSleepTime() {
-		return sleepTime;
+
+	public double getSpeed() {
+		return speed;
 	}
 
-	public void setSleepTime(int sleepTime) {
-		this.sleepTime = sleepTime;
+	public void setSpeed(double speed) {
+		this.speed = speed;
 	}
 
 	public Evaluator getEvaluator() {
@@ -30,7 +31,7 @@ public class Context {
 	public Context()
 	{
 		activeNetworks = new ArrayList<CyNetwork>();
-		sleepTime = 1;
+		speed = 2.0;
 	}
 
 	public boolean containsNetwork(CyNetwork network)
