@@ -90,7 +90,7 @@ public class Evaluator extends Thread {
 			viewHandler.refresh(networkView);
 			
 			try {
-				Thread.sleep((long)(1/appContext.getSpeed())*1000);
+				Thread.sleep((long)(10000 - appContext.getSpeed()*1000));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

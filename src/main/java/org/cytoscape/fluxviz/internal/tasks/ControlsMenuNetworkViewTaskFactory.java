@@ -22,7 +22,7 @@ public class ControlsMenuNetworkViewTaskFactory extends AbstractNetworkViewTaskF
 	
 	@Override
 	public TaskIterator createTaskIterator(CyNetworkView networkView) {
-		return new TaskIterator(new ControlsMenuNetworkViewTask(networkView, appContext));
+		return new TaskIterator(new ControlsMenuNetworkViewTask(networkView, appContext, this));
 	}
 
 }

@@ -24,10 +24,10 @@ public class NodeViewHandler {
 	CyNetworkViewManager cyNetworkViewManager;
 	VisualMappingManager visualMappingManager;
 	
-	public NodeViewHandler(CyNetworkViewManager cyNetworkViewManager, VisualMappingManager visualMappingManager)
+	public NodeViewHandler(Context appContext)
 	{
-		this.cyNetworkViewManager = cyNetworkViewManager;
-		this.visualMappingManager = visualMappingManager;
+		this.cyNetworkViewManager = appContext.getNetworkViewManager();
+		this.visualMappingManager = appContext.getVisualMappingManager();
 	}
 	
 	/**

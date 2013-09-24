@@ -24,10 +24,10 @@ public class EdgeViewHandler {
 	CyNetworkViewManager cyNetworkViewManager;
 	VisualMappingManager visualMappingManager;
 	
-	public EdgeViewHandler(CyNetworkViewManager cyNetworkViewManager, VisualMappingManager visualMappingManager)
+	public EdgeViewHandler(Context appContext)
 	{
-		this.cyNetworkViewManager = cyNetworkViewManager;
-		this.visualMappingManager = visualMappingManager;
+		this.cyNetworkViewManager = appContext.getNetworkViewManager();
+		this.visualMappingManager = appContext.getVisualMappingManager();
 	}
 	
 	/**

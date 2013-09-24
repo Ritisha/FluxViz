@@ -10,7 +10,6 @@ import org.cytoscape.model.CyEdge;
 import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyRow;
 import org.cytoscape.view.model.CyNetworkView;
-import org.cytoscape.view.model.CyNetworkViewManager;
 import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.view.presentation.property.LineTypeVisualProperty;
 import org.cytoscape.view.presentation.property.values.LineType;
@@ -37,14 +36,14 @@ public class ViewHandler {
 	ContinuousMapping<Double, Paint> edgeSumNodeBorderColorMapping;
 	DiscreteMapping<Boolean, LineType> selectedNodeBorderLineTypeMapping;
 	
-	public ViewHandler(CyNetworkViewManager cyNetworkViewManager, VisualMappingManager visualMappingManager, VisualStyleFactory visualStyleFactory, VisualMappingFunctionFactory continousVisualMappingFunctionFactory, VisualMappingFunctionFactory discreteVisualMappingFunctionFactory)
+	public ViewHandler(Context appContext)
 	{
-		nodeViewHandler = new NodeViewHandler(cyNetworkViewManager, visualMappingManager);
-		edgeViewHandler = new EdgeViewHandler(cyNetworkViewManager, visualMappingManager);
-		this.continousVisualMappingFunctionFactory = continousVisualMappingFunctionFactory;
-		this.discreteVisualMappingFunctionFactory = discreteVisualMappingFunctionFactory;
-		this.visualMappingManager = visualMappingManager;
-		this.visualStyleFactory = visualStyleFactory;
+		nodeViewHandler = new NodeViewHandler(appContext);
+		edgeViewHandler = new EdgeViewHandler(appContext);
+		this.continousVisualMappingFunctionFactory = appContext.getContinousVisualMappingFunctionFactory();
+		this.discreteVisualMappingFunctionFactory = appContext.getDiscreteVisualMappingFunctionFactory();
+		this.visualMappingManager = appContext.getVisualMappingManager();
+		this.visualStyleFactory = appContext.getVisualStyleFactory();
 	}
 
 	public void createVisualMappings()
@@ -58,16 +57,16 @@ public class ViewHandler {
 		Double val7 = 10.0d;
 		Double val8 = -1.0d;
 		
-		Color color1 = new Color(215, 25, 32);
-		Color color2 = new Color(250, 184, 22);
-		Color color3 = new Color(220, 220, 220);
-		Color color4 = new Color(115, 180, 226);
-		Color color5 = new Color(46, 49, 146);
-		Color color6 = new Color(236, 132, 35);
-		Color color7 = new Color(0, 102, 179);
-		Color color8 = new Color(248, 248, 248);
-		Color color9 = new Color(199, 223, 244);
-		Color color10 = new Color(115, 180, 226);
+		Color color1 = new Color(215, 25, 32); //red
+		Color color2 = new Color(250, 184, 22); //yellow
+		Color color3 = new Color(220, 220, 220); //grey
+		Color color4 = new Color(115, 180, 226); //light blue
+		Color color5 = new Color(46, 49, 146); //purple
+		Color color6 = new Color(236, 132, 35); //yellow
+		Color color7 = new Color(0, 102, 179); //dark blue
+		Color color8 = new Color(248, 248, 248); //white
+		Color color9 = new Color(199, 223, 244); //light blue
+		Color color10 = new Color(115, 180, 226); //dark blue
 		
 		BoundaryRangeValues<Paint> brv1 = new BoundaryRangeValues<Paint>(color1, color1, color1);
 		BoundaryRangeValues<Paint> brv2 = new BoundaryRangeValues<Paint>(color2, color2, color2);
@@ -133,10 +132,6 @@ public class ViewHandler {
 	
 	public void refresh(CyNetworkView networkView)
 	{
-		VisualStyle style = visualMappingManager.getCurrentVisualStyle();
-		style.apply(networkView);
-		networkView.updateView();
-		
 		List<CyEdge> allEdges = new ArrayList<CyEdge>();
 		allEdges = networkView.getModel().getEdgeList();
 		for(CyEdge currEdge : allEdges)
@@ -152,6 +147,10 @@ public class ViewHandler {
 				networkView.getEdgeView(currEdge).setLockedValue(BasicVisualLexicon.EDGE_UNSELECTED_PAINT, deactivatingEdgeMapping.getMappedValue(row));
 			}
 		}
+		
+		VisualStyle style = visualMappingManager.getCurrentVisualStyle();
+		style.apply(networkView);
+		networkView.updateView();
 	}
 
 	public NodeViewHandler getNodeViewHandler() {

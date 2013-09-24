@@ -2,20 +2,20 @@ package org.cytoscape.fluxviz.internal;
 
 import static org.cytoscape.work.ServiceProperties.IN_MENU_BAR;
 import static org.cytoscape.work.ServiceProperties.IN_TOOL_BAR;
-import static org.cytoscape.work.ServiceProperties.LARGE_ICON_URL;
 import static org.cytoscape.work.ServiceProperties.MENU_GRAVITY;
 import static org.cytoscape.work.ServiceProperties.PREFERRED_ACTION;
 import static org.cytoscape.work.ServiceProperties.PREFERRED_MENU;
-import static org.cytoscape.work.ServiceProperties.SMALL_ICON_URL;
 import static org.cytoscape.work.ServiceProperties.TITLE;
 import static org.cytoscape.work.ServiceProperties.TOOLTIP;
 
 import java.util.Properties;
 
+import org.cytoscape.application.swing.CySwingApplication;
 import org.cytoscape.fluxviz.internal.logic.Context;
 import org.cytoscape.fluxviz.internal.logic.EdgeDefaultsSetter;
 import org.cytoscape.fluxviz.internal.logic.FluxVizEnabledChecker;
 import org.cytoscape.fluxviz.internal.logic.NodeDefaultsSetter;
+import org.cytoscape.fluxviz.internal.logic.SelectionChangedListener;
 import org.cytoscape.fluxviz.internal.logic.ViewHandler;
 import org.cytoscape.fluxviz.internal.tasks.ControlsMenuNetworkViewTaskFactory;
 import org.cytoscape.fluxviz.internal.tasks.EditNodeAttributesTaskFactory;
@@ -29,7 +29,9 @@ import org.cytoscape.fluxviz.internal.tasks.UseFluxVizNetworkViewTaskFactory;
 import org.cytoscape.model.events.AddedEdgesListener;
 import org.cytoscape.model.events.AddedNodesListener;
 import org.cytoscape.model.events.NetworkAddedListener;
+import org.cytoscape.model.events.RowsSetListener;
 import org.cytoscape.service.util.AbstractCyActivator;
+import org.cytoscape.task.DynamicTaskFactoryProvisioner;
 import org.cytoscape.task.EdgeViewTaskFactory;
 import org.cytoscape.task.NetworkViewTaskFactory;
 import org.cytoscape.task.NodeViewTaskFactory;
@@ -37,6 +39,7 @@ import org.cytoscape.view.model.CyNetworkViewManager;
 import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
 import org.cytoscape.view.vizmap.VisualMappingManager;
 import org.cytoscape.view.vizmap.VisualStyleFactory;
+import org.cytoscape.work.swing.PanelTaskManager;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -56,13 +59,25 @@ public class CyActivator extends AbstractCyActivator {
 	public void start(BundleContext bundleContext) throws Exception {
 
 		VisualMappingManager visualMappingManager = getService(bundleContext, VisualMappingManager.class);
-		CyNetworkViewManager cyNetworkViewManager = getService(bundleContext, CyNetworkViewManager.class);
+		CyNetworkViewManager networkViewManager = getService(bundleContext, CyNetworkViewManager.class);
 		VisualStyleFactory visualStyleFactory = getService(bundleContext, VisualStyleFactory.class);
 		VisualMappingFunctionFactory continousVisualMappingFunctionFactory = getService(bundleContext, VisualMappingFunctionFactory.class, "(mapping.type=continuous)");
 		VisualMappingFunctionFactory discreteVisualMappingFunctionFactory = getService(bundleContext, VisualMappingFunctionFactory.class, "(mapping.type=discrete)");
-
+		PanelTaskManager panelTaskManager = getService(bundleContext, PanelTaskManager.class);
+		CySwingApplication swingApplication = getService(bundleContext, CySwingApplication.class);
+		DynamicTaskFactoryProvisioner provisioner = getService(bundleContext, DynamicTaskFactoryProvisioner.class);
+		
 		Context appContext = new Context();
-		ViewHandler viewHandler = new ViewHandler(cyNetworkViewManager, visualMappingManager, visualStyleFactory, continousVisualMappingFunctionFactory, discreteVisualMappingFunctionFactory);
+		appContext.setVisualMappingManager(visualMappingManager);
+		appContext.setNetworkViewManager(networkViewManager);
+		appContext.setVisualStyleFactory(visualStyleFactory);
+		appContext.setContinousVisualMappingFunctionFactory(continousVisualMappingFunctionFactory);
+		appContext.setDiscreteVisualMappingFunctionFactory(discreteVisualMappingFunctionFactory);
+		appContext.setPanelTaskManager(panelTaskManager);
+		appContext.setSwingApplication(swingApplication);
+		appContext.setProvisioner(provisioner);
+		
+		ViewHandler viewHandler = new ViewHandler(appContext);
 
 		//checks if the added network already had FluxViz enabled
 		registerService(bundleContext, new FluxVizEnabledChecker(appContext, viewHandler), NetworkAddedListener.class, new Properties());
@@ -194,7 +209,7 @@ public class CyActivator extends AbstractCyActivator {
 		restartProps.setProperty(TITLE, "Restart");
 		registerService(bundleContext, new StartFlowNetworkViewTaskFactory(viewHandler, appContext, true), NetworkViewTaskFactory.class, restartProps);
 
-		//add FV icon to toolbar for FV UI
+		//add FV icon to tool-bar for FV UI
 		Properties controlsUIProps = new Properties();
 		controlsUIProps.setProperty(PREFERRED_ACTION, "NEW");
 		controlsUIProps.setProperty(PREFERRED_MENU, "Apps.FluxViz");
@@ -202,11 +217,12 @@ public class CyActivator extends AbstractCyActivator {
 		controlsUIProps.setProperty(IN_MENU_BAR, "false");
 		controlsUIProps.setProperty(TITLE, "Controls");
 		controlsUIProps.setProperty(IN_TOOL_BAR, "true");
-		controlsUIProps.setProperty(SMALL_ICON_URL, "/Users/laungani/Desktop/small_icon_url.jpg");
-		controlsUIProps.setProperty(LARGE_ICON_URL, "/Users/laungani/Desktop/large_icon_url.jpg");
+		//controlsUIProps.setProperty(SMALL_ICON_URL, getClass().getResource("small_icon_url.jpg").toString());
+		//controlsUIProps.setProperty(LARGE_ICON_URL, getClass().getResource("small_icon_url.jpg").toString());
 		controlsUIProps.setProperty(TOOLTIP, "FluxViz Controls Menu");
 		registerService(bundleContext, new ControlsMenuNetworkViewTaskFactory(appContext), NetworkViewTaskFactory.class, controlsUIProps);
 
+		registerService(bundleContext,new SelectionChangedListener(appContext), RowsSetListener.class, new Properties());
 		viewHandler.createVisualMappings();
 	}
 }
