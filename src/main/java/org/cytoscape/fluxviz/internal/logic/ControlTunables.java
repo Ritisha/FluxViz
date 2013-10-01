@@ -3,8 +3,8 @@ package org.cytoscape.fluxviz.internal.logic;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.cytoscape.model.CyEdge;
-import org.cytoscape.model.CyNode;
+import org.cytoscape.fluxviz.internal.ui.ControlsDialog;
+import org.cytoscape.model.CyRow;
 import org.cytoscape.work.Tunable;
 import org.cytoscape.work.TunableValidator;
 import org.cytoscape.work.util.BoundedDouble;
@@ -26,14 +26,16 @@ public class ControlTunables implements TunableValidator {
 	public BoundedDouble edgeEfficiency;
 	
 	Context appContext;
-	List<CyNode> currentlySelectedNodes;
-	List<CyEdge> currentlySelectedEdges;
+	ControlsDialog controlsDialog;
+	List<Long> currentlySelectedNodes;
+	List<Long> currentlySelectedEdges;
 	
-	public ControlTunables(Context appContext)
+	public ControlTunables(Context appContext, ControlsDialog controlsDialog)
 	{
 		this.appContext = appContext;
-		currentlySelectedNodes = new ArrayList<CyNode>();
-		currentlySelectedEdges = new ArrayList<CyEdge>();
+		this.controlsDialog = controlsDialog;
+		currentlySelectedNodes = new ArrayList<Long>();
+		currentlySelectedEdges = new ArrayList<Long>();
 		
 		playbackSpeed = new BoundedDouble(0.0, appContext.getSpeed(), 5.0, false, false);
 		typeOfMolecule = new ListSingleSelection<String>("Kinase", "Phosphatase", "GTPase", "Transcription Factor", "Ligands", "Small Mol Activator", "Small Mol Inhibitor", "Enzyme1", "Enzyme2", "Enzyme3");
@@ -47,22 +49,28 @@ public class ControlTunables implements TunableValidator {
 		typeOfEdge = new ListSingleSelection<String>("Activating", "Deactivating");
 		edgeEfficiency = new BoundedDouble(0.0, 0.0, 100.0, false, false);
 	}
-	
-	public List<CyNode> getCurrentlySelectedNodes() {
+
+	public List<Long> getCurrentlySelectedNodes() {
 		return currentlySelectedNodes;
 	}
 
-	public void setCurrentlySelectedNodes(List<CyNode> currentlySelectedNodes) {
-		
+	public void setCurrentlySelectedNodes(List<Long> currentlySelectedNodes) {
+		System.out.println("Set currentlySelectedNodes");
 		this.currentlySelectedNodes = currentlySelectedNodes;
+		setTypeOfMolecule(null);
+		this.controlsDialog.repaint();
+		//setInitialActivityLevel(null);
+		//setMoleculeConcentration(null);
 	}
 
-	public List<CyEdge> getCurrentlySelectedEdges() {
+	public List<Long> getCurrentlySelectedEdges() {
 		return currentlySelectedEdges;
 	}
 
-	public void setCurrentlySelectedEdges(List<CyEdge> currentlySelectedEdges) {
+	public void setCurrentlySelectedEdges(List<Long> currentlySelectedEdges) {
 		this.currentlySelectedEdges = currentlySelectedEdges;
+		//setTypeOfEdge(null);
+		//setEdgeEfficiency(null);
 	}
 
 	@Tunable(description = "Playback speed in [seconds/cycle]", params = "slider=true")
@@ -70,19 +78,51 @@ public class ControlTunables implements TunableValidator {
 		return playbackSpeed;
 	}
 	public void setPlaybackSpeed(BoundedDouble playbackSpeed) {
-		
 		appContext.setSpeed(playbackSpeed.getValue());
 		this.playbackSpeed = playbackSpeed;
 	}
 	
-	//Node Tunables. Get what nodes are selected.
+	//Node Tunables.
 	
 	@Tunable(description = "Type of Molecule", groups = "MyNode Attributes")
 	public ListSingleSelection<String> getTypeOfMolecule() {
 		return typeOfMolecule;
 	}
 	public void setTypeOfMolecule(ListSingleSelection<String> typeOfMolecule) {
-		this.typeOfMolecule = typeOfMolecule;
+		
+		CyRow row;
+		System.out.println("In setTypeOfMolecule..");
+		if(typeOfMolecule == null) 
+		{
+			System.out.println("its null");
+			//User selected. 
+			if(this.currentlySelectedNodes.size() != 1)
+			{
+				//no nodes or more than 1 node are selected, display nothing
+				this.typeOfMolecule.setSelectedValue(null);
+			}
+			else
+			{
+				System.out.println("Its 1!");
+				//one node selected, display it's value
+				row = ColumnsCreator.DefaultNodeTable.getRow(currentlySelectedNodes.get(0));
+				this.typeOfMolecule.setSelectedValue(row.get(ColumnsCreator.NODE_TYPE, String.class));
+				System.out.println(this.typeOfMolecule.getSelectedValue());
+			}
+		}
+		else
+		{
+			System.out.println("Not null..");
+			String newType = typeOfMolecule.getSelectedValue();
+			System.out.println("newType is " + newType);
+			for(Long currNode : currentlySelectedNodes)
+			{
+				System.out.println("For node " + currNode);
+				row = ColumnsCreator.DefaultNodeTable.getRow(currNode);
+				row.set(ColumnsCreator.NODE_TYPE, newType);
+			}
+			this.typeOfMolecule = typeOfMolecule;
+		}				
 	}
 	
 	@Tunable(description = "Constitutively active", groups = "MyNode Attributes")
@@ -143,6 +183,8 @@ public class ControlTunables implements TunableValidator {
 	public void setMoleculeConcentration(BoundedDouble moleculeConcentration) {
 		this.moleculeConcentration = moleculeConcentration;
 	}
+	
+	//Edge tunables
 	
 	@Tunable(description = "Type of edge", groups = "MyEdge Attributes")
 	public ListSingleSelection<String> getTypeOfEdge() {

@@ -37,7 +37,8 @@ public class ControlsDialog extends JDialog {
 		networkName = ColumnsCreator.DefaultNetworkTable.getRow(network.getSUID()).get(CyNetwork.NAME, String.class);
 		add(attributesPanel);
 		
-		ControlTunables tunablesContext = new ControlTunables(appContext);
+		ControlTunables tunablesContext = new ControlTunables(appContext, this);
+		appContext.setControlTunables(tunablesContext);
 		
 		if(panelTaskManager.validateAndApplyTunables(tunablesContext))
 		{
@@ -55,4 +56,5 @@ public class ControlsDialog extends JDialog {
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
+	
 }

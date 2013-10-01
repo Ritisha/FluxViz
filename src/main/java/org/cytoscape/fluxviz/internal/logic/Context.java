@@ -17,7 +17,8 @@ public class Context {
 	private List<CyNetwork> activeNetworks;
 	private Evaluator evaluator = null;
 	double speed;
-	
+	ControlTunables controlTunables = null;
+
 	VisualMappingManager visualMappingManager;
 	CyNetworkViewManager networkViewManager;
 	VisualStyleFactory visualStyleFactory;
@@ -124,5 +125,13 @@ public class Context {
 	public void addNetwork(CyNetwork network)
 	{
 		activeNetworks.add(network);
+	}
+	
+	public ControlTunables getControlTunables() {
+		return controlTunables;
+	}
+
+	public void setControlTunables(ControlTunables controlTunables) {
+		this.controlTunables = controlTunables;
 	}
 }
